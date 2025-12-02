@@ -17,21 +17,21 @@ return new class extends Migration
         $table->string('history_id', 8)->primary();
 
         // Foreign Keys
-        $table->string('users_id', 5);
-        $table->string('rental_item_id', 5);
+        $table->unsignedBigInteger('user_id');
+        $table->unsignedBigInteger('rental_id');
 
         // Other Columns
-    $table->string('aksi', 150);
+        $table->string('aksi', 150);
         $table->string('status_book', 45);
         $table->timestamp('waktu');
 
         // Relations
-        $table->foreign('users_id')
-            ->references('users_id')->on('users')
+        $table->foreign('user_id')
+            ->references('user_id')->on('users')
             ->onDelete('cascade');
 
-        $table->foreign('rental_item_id')
-            ->references('rental_item_id')->on('rental_item')
+        $table->foreign('rental_id')
+            ->references('rental_id')->on('rental_item')
             ->onDelete('cascade');
 
         $table->timestamps();

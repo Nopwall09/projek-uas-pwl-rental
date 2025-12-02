@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('method_pembayaran', function (Blueprint $table) {
-            $table->string('method_id', 2)->primary();
+            $table->id('method_id');
             $table->string('method', 30)->nullable();
         });
     }

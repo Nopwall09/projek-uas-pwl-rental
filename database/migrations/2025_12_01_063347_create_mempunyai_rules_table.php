@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mempunyai_rules', function (Blueprint $table) {
-            $table->string('rules_id', 3);
-            $table->string('user_id', 5);
+            $table->unsignedBigInteger('rules_id');
+            $table->unsignedBigInteger('user_id');
 
             // relasi
             $table->foreign('rules_id')->references('rules_id')->on('rules')->onDelete('cascade')->onUpdate('cascade');

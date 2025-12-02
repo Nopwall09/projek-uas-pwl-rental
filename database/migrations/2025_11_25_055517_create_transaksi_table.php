@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaksi', function (Blueprint $table) {
-            $table->string('transaksi_id', 5)->primary();
-            $table->string('method_id', 2);
-            $table->string('rental_item', 5);
+            $table->id('transaksi_id');
+
+            // Foreign Keys
+            $table->unsignedBigInteger('method_id');
+            $table->unsignedBigInteger('rental_id');
 
             // base table
             $table->date ('tanggal_transaksi');
@@ -23,7 +25,7 @@ return new class extends Migration
 
             // relasi
             $table->foreign('method_id')->references('method_id')->on('method_pembayaran')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('rental_item')->references('rental_item')->on('rental_item')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('rental_id')->references('rental_id')->on('rental_item')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

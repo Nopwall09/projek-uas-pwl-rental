@@ -12,17 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->string('user_id', 5)->primary();
-            $table->string('name');
-
-            // buat kolom role_id dulu
-            $table->unsignedBigInteger('role_id');
-            // relasi dengan tabel roles
-            $table->foreign('role_id')
-                ->references('id')
-                ->on('roles')
-                ->onDelete('cascade');
-
+            $table->id('user_id');
+            $table->string('nama');
+            $table->enum('role', ['admin', 'user','kasir']);
             $table->string('username')->unique();
             $table->string('password');
             $table->string('email')->unique();

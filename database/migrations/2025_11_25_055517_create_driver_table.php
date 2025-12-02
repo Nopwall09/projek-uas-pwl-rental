@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('driver', function (Blueprint $table) {
-            $table->string('driver_id', 5)->primary();
+            $table->id('driver_id');
             $table->string('driver_nama', 50)->nullable();
             $table->string('driver_no_sim', 20)->nullable();
             $table->string('driver_no_telp', 15)->nullable();

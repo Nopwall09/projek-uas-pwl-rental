@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('rental_item', function (Blueprint $table) {
             // Primary Key
-            $table->string('rental_item_id', 5)->primary();
+            $table->id('rental_id');
 
             // Foreign Keys
-            $table->string('users_id', 5);
-            $table->string('mobil_id', 4);
-            $table->string('driver_id', 5);
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('mobil_id');
+            $table->unsignedBigInteger('driver_id')->nullable();
 
             // base columns
             $table->string('lama_rental', 25);
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('jaminan', 30);
 
             //relasi
-            $table->foreign('users_id')->references('users_id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('mobil_id')->references('mobil_id')->on('mobil')->onDelete('cascade');
             $table->foreign('driver_id')->references('driver_id')->on('driver')->onDelete('cascade');
             $table->timestamps();

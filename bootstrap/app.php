@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -11,7 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Grup middleware untuk Admin
+        $middleware->group('admin', [
+            \Illuminate\Auth\Middleware\Authenticate::class,
+            \App\Http\Middleware\Admin::class,
+        ]);
+        // Grup middleware untuk User
+        $middleware->group('user', [
+            \Illuminate\Auth\Middleware\Authenticate::class,
+            \App\Http\Middleware\Kasir::class,
+        ]); 
+        // Grup middleware untuk Kasir
+        $middleware->group('kasir', [
+            \Illuminate\Auth\Middleware\Authenticate::class,
+            \App\Http\Middleware\Kasir::class,
+        ]); 
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

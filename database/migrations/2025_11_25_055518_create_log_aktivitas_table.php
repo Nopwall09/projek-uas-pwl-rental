@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('log_aktivitas', function (Blueprint $table) {
-            $table->sring('log_id', 5)->primary();
-            $table->string('user_id', 5);
+            $table->id('log_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('aktivitas', 100);
             $table->dateTime('waktu_aktivitas');
 

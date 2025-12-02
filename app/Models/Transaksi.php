@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class mempunyai_rules extends Model
+class Transaksi extends Model
 {
     //
 }
