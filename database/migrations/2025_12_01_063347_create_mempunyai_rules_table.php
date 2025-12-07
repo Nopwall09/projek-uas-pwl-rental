@@ -18,8 +18,6 @@ return new class extends Migration
             // relasi
             $table->foreign('rules_id')->references('rules_id')->on('rules')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-
-            $table->timestamps();
         });
     }
 

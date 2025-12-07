@@ -22,7 +22,7 @@ return new class extends Migration
 
         // Other Columns
         $table->string('aksi', 150);
-        $table->string('status_book', 45);
+        $table->enum('status_book', ['pending', 'confirmed', 'canceled', 'completed']);
         $table->timestamp('waktu');
 
         // Relations

@@ -18,7 +18,6 @@ return new class extends Migration
             //relasi
             $table->foreign('fasilitas_id')->references('fasilitas_id')->on('fasilitas')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('mobil_id')->references('mobil_id')->on('mobil')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
         });
     }
 

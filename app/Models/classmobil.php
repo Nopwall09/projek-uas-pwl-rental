@@ -1,24 +1,23 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tipe extends Model
+class CarClass extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipe';
-    protected $primaryKey = 'tipe_id';
+    protected $table = 'class';
+    protected $primaryKey = 'class_id';
     public $timestamps = false;
 
     protected $fillable = [
-        'tipe_nama',
+        'class_nama',
     ];
 
     public function mobils()
     {
-        return $this->hasMany(Mobil::class, 'tipe_id', 'tipe_id');
+        return $this->hasMany(Mobil::class, 'class_id', 'class_id');
     }
 }

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('rating', 50);
             $table->text('komentar', 255);
             $table->date('tanggal_feedback');
-            $table->timestamps();
             $table->foreign('rental_id')->references('rental_id')->on('rental_item')->onDelete('cascade');
         });
     }

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('driver_nama', 50)->nullable();
             $table->string('driver_no_sim', 20)->nullable();
             $table->string('driver_no_telp', 15)->nullable();
-            $table->timestamps();
         });
     }
 

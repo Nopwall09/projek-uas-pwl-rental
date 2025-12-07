@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('tipe', function (Blueprint $table) {
             $table->id('tipe_id');
             $table->string('tipe_nama', 30);
-            $table->timestamps();
         });
     }
 

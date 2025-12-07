@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,17 +10,15 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'users';
-
     protected $primaryKey = 'user_id';
-    public $incrementing = true;       
-    protected $keyType = 'int';        
 
     protected $fillable = [
-        'name',
+        'nama',
         'role',
         'username',
         'password',
         'email',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -31,17 +28,26 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
-    public function isadmin()
+
+    public function rentalItems()
     {
-        return $this->role === 'admin';
+        return $this->hasMany(RentalItem::class, 'user_id', 'user_id');
     }
-    public function isuser()
+
+    public function logAktivitas()
     {
-        return $this->role === 'user';
+        return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
     }
-    public function iskasir()
+
+    public function historyRentals()
     {
-        return $this->role === 'kasir'; 
-    }    
+        return $this->hasMany(HistoryRental::class, 'user_id', 'user_id');
+    }
+
+    public function rules()
+    {
+        return $this->belongsToMany(Rules::class, 'mempunyai_rules', 'user_id', 'rules_id');
+    }
 }

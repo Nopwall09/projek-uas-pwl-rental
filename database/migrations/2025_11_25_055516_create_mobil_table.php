@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('mobil_plat', 30);
             $table->string('mobil_tahun', 4);
             $table->decimal('harga_rental', 10, 2);
-            $table->timestamps();
 
             // relation
             $table->foreign('merk_id')->references('merk_id')->on('merk')->onDelete('cascade');

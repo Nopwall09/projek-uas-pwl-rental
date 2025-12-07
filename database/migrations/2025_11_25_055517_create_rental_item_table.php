@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('pilihan', 30);
             $table->date('tgl');
             $table->decimal('total_sewa', 10, 2);
-            $table->string('booking_source', 20);
+            $table->enum('booking_source', ['online', 'offline']);
             $table->string('jaminan', 30);
 
             //relasi

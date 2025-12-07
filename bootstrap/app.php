@@ -4,7 +4,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -12,22 +11,32 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Grup middleware untuk Admin
+
+        // alias middleware
+        $middleware->alias([
+            'role' => \App\Http\Middleware\Role::class,
+        ]);
+
+        // group admin
         $middleware->group('admin', [
             \Illuminate\Auth\Middleware\Authenticate::class,
-            \App\Http\Middleware\Admin::class,
+            \App\Http\Middleware\Role::class . ':admin',
         ]);
-        // Grup middleware untuk User
+
+        // group user
         $middleware->group('user', [
             \Illuminate\Auth\Middleware\Authenticate::class,
-            \App\Http\Middleware\Kasir::class,
-        ]); 
-        // Grup middleware untuk Kasir
+            \App\Http\Middleware\Role::class . ':user',
+        ]);
+
+        // group kasir
         $middleware->group('kasir', [
             \Illuminate\Auth\Middleware\Authenticate::class,
-            \App\Http\Middleware\Kasir::class,
-        ]); 
+            \App\Http\Middleware\Role::class . ':kasir',
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();

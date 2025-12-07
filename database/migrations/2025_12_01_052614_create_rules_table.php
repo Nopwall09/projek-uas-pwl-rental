@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('rules', function (Blueprint $table) {
             $table->id('rules_id');
             $table->text('rules', 55);
-            $table->timestamps();
         });
     }
 
