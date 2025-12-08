@@ -1,4 +1,5 @@
 <header>
+    <link rel="stylesheet" href="{{ asset('resources/css/style.css') }}">
     <nav class="navbar">
         <div class="logo">
             <img src="img/logo.png" alt="Logo">
