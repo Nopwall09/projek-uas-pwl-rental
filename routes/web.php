@@ -2,10 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
-Route::get('/', function () {
+/* ini cuman buat tes tar ganti aja*/
+Route::get('/home', function () {
     return view('home');
 });
+
+Route::get('katalog', function () {
+    return view('katalog/index');
+});
+
+Route::get('pemesanan', function () {
+    return view('pemesanan/index');
+});
+
+Route::get('Konfirmasi-pembayaran', function () {
+    return view('pemesanan/konfirPesan');
+});
+/* ------------------------------------------------------------*/
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [UserController::class, 'dashboard'])->name('admin.dashboard');

@@ -2,12 +2,8 @@
 <html>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <!-- ================= HERO ================= -->
-    <section>
-    <div class="hero-img">
-            <div class="about-image">
-              <img src="Gree.png" alt="Tim HDB Airconds Profesional" />
-            </div>
-        </div>
+    <section class="hero-section"> 
+    <img src="{{ asset('img/showroom.jpg') }}" alt="Showroom Rental Mobil" class="hero-background"/> 
     </section>
 
 
@@ -54,7 +50,31 @@
 
         <div class="grid-mobil">
 
-            <!-- Card item → tinggal duplicate -->
+            <!-- Card item  -->
+            <div class="card">
+                <img src="{{ asset('img/showroom.jpg') }}">
+                <h4 style="margin-top:15px;">Brio</h4>
+                <button>Booking</button>
+            </div>
+
+            <div class="card">
+                <img>
+                <h4 style="margin-top:15px;">Brio</h4>
+                <button>Booking</button>
+            </div>
+
+            <div class="card">
+                <img>
+                <h4 style="margin-top:15px;">Brio</h4>
+                <button>Booking</button>
+            </div>
+
+            <div class="card">
+                <img>
+                <h4 style="margin-top:15px;">Brio</h4>
+                <button>Booking</button>
+            </div>
+
             <div class="card">
                 <img>
                 <h4 style="margin-top:15px;">Brio</h4>
@@ -99,7 +119,9 @@
     <section>
         <div class="cta">
             <p>Semua unit bersih, wangi, dan siap jalan setiap hari. Klik tombol berikut untuk cek unit kami yang lain!</p>
-            <button style="background:#163a63;color:white;padding:12px 28px;border:none;border-radius:25px;">Lihat semua unit</button>
+            <a href="{{ url('/katalog') }}">
+                <button style="background:#163a63;color:white;padding:12px 28px;border:none;border-radius:25px;">Lihat semua unit</button>
+            </a>
         </div>
     </section>
 

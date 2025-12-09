@@ -1,8 +1,9 @@
 <header>
-    <link rel="stylesheet" href="{{ asset('resources/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <nav class="navbar">
         <div class="logo">
-            <img src="img/logo.png" alt="Logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo">
         </div>
 
         <div class="hamburger" onclick="toggleMenu()">
@@ -12,10 +13,10 @@
         </div>
 
         <ul class="nav-menu" id="menu">
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">KATALOG MOBIL</a></li>
-            <li><a href="#">KONTAK</a></li>
-            <li><a href="#">LOGIN</a></li>
+            <li><a href="{{ url('/home') }}">HOME</a></li>
+            <li><a href="{{ url('/katalog') }}">KATALOG MOBIL</a></li>
+            <li><a href="https://wa.me/6282333318107">KONTAK</a></li>
+            <li><a href="">LOGIN</a></li>
         </ul>
     </nav>
 </header>
