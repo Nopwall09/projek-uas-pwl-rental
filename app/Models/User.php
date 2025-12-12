@@ -48,6 +48,14 @@ class User extends Authenticatable
 
     public function rules()
     {
-        return $this->belongsToMany(Rules::class, 'mempunyai_rules', 'user_id', 'rules_id');
+        return $this->belongsToMany(
+            Rules::class,
+            'mempunyai_rules',
+            'user_id',
+            'rules_id',
+            'user_id',
+            'rules_id'
+        );
     }
+
 }

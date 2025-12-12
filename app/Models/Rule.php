@@ -19,6 +19,14 @@ class Rules extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'mempunyai_rules', 'rules_id', 'user_id');
+        return $this->belongsToMany(
+            User::class,
+            'mempunyai_rules',
+            'rules_id',
+            'user_id',
+            'rules_id',
+            'user_id'
+        );
     }
+
 }
