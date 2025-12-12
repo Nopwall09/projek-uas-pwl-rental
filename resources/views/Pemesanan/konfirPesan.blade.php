@@ -19,10 +19,10 @@
 
     <section class="box summary">
         <h3>Pesanan</h3>
-        <p><strong>Mobil</strong>  : Brio</p>
-        <p><strong>Check In</strong> : 10 Desember 2025</p>
-        <p><strong>Check Out</strong>: 13 Desember 2025</p>
-        <p><strong>Opsi</strong>     : Dengan Driver</p>
+        <p><strong>Mobil</strong>  : Mobil</p>
+        <p><strong>Check In</strong> : - </p>
+        <p><strong>Check Out</strong>: -</p>
+        <p><strong>Opsi</strong>     : -</p>
 
         <div class="subtotal">
             <span>SubTotal</span><b>Rp. - </b>

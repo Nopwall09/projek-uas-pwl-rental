@@ -7,7 +7,7 @@
                     <div class="media">
                         <img src="{{ asset('img/car.png') }}" alt="Car image" />
                     </div>
-                    <h1 class="car-title">Honda CIVIC</h1>
+                    <h1 class="car-title">Nama Mobil</h1>
                 </div>
 
                 <hr class="sep">

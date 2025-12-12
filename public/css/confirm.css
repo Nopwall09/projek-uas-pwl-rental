@@ -1,6 +1,6 @@
 body{
     background:#eff4f9;
-    font-family:Poppins, sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin:0;
     padding:0;
 }
@@ -69,14 +69,27 @@ textarea{
 .total b{color:#004b7a; font-size:17px;}
 
 /* PAYMENT */
-.payment-method label{
-    display:flex;
-    align-items:center;
-    gap: 8px;
-    margin-bottom:10px;
-    font-size:14px;
-    font-weight:600;
+.payment-method label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    margin-bottom: 12px;
 }
+
+.payment-method {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 10px;
+}
+
+.payment-method input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
 
 .submit-btn{
     background:#002f54;

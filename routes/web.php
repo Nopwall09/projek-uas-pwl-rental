@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 /* ini cuman buat tes tar ganti aja*/
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::get('/home', function () {
     return view('home');
 });
@@ -15,9 +19,26 @@ Route::get('pemesanan', function () {
     return view('pemesanan/index');
 });
 
+Route::get('mypesan', function () {
+    return view('profil/pesanan-saya');
+});
+
+Route::get('Konfirmasi', function () {
+    return view('pemesanan/konfirPesan');
+});
+
 Route::get('Konfirmasi-pembayaran', function () {
     return view('pemesanan/konfirPesan');
 });
+
+Route::get('/profil', function () {
+    return view('profil/index');
+});
+
+Route::get('/login', function () {
+    return view('auth/login');
+});
+
 /* ------------------------------------------------------------*/
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

@@ -54,7 +54,9 @@
             <div class="card">
                 <img src="{{ asset('img/showroom.jpg') }}">
                 <h4 style="margin-top:15px;">Brio</h4>
+                <a href="{{ url('/pemesanan') }}">
                 <button>Booking</button>
+                </a>
             </div>
 
             <div class="card">
