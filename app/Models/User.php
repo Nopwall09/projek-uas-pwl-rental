@@ -45,17 +45,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(HistoryRental::class, 'user_id', 'user_id');
     }
-
-    public function rules()
-    {
-        return $this->belongsToMany(
-            Rules::class,
-            'mempunyai_rules',
-            'user_id',
-            'rules_id',
-            'user_id',
-            'rules_id'
-        );
-    }
-
 }
