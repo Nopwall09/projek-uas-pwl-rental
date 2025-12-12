@@ -14,12 +14,12 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-item active">
-            <span class="icon">👤</span>
+            <span class="icon"></span>
             <a href="{{ url('/profil') }}">Akun Saya</a>
         </div>
 
         <div class="sidebar-item">
-            <span class="icon">📄</span>
+            <span class="icon"></span>
             <a href="{{ url('/pesanan-saya') }}">Pesanan Saya</a>
         </div>
     </div>
