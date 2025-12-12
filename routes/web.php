@@ -3,10 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 /* ini cuman buat tes tar ganti aja*/
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/home', function () {
     return view('home');
 });
@@ -48,6 +44,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 });
+
 
 Route::middleware(['auth', 'role:kasir'])->group(function () {
     Route::get('/kasir/dashboard', [UserController::class, 'dashboard'])->name('kasir.dashboard');
