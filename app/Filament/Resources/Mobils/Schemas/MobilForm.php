@@ -7,7 +7,6 @@ use Filament\Forms\Components\Select;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
- // Pastikan import Section ini benar
 
 class MobilForm
 {
@@ -15,7 +14,6 @@ class MobilForm
     {
         return $schema
             ->components([
-                // --- KOTAK 1: Klasifikasi (Dropdown) ---
                 Section::make('Klasifikasi Mobil')
                     ->description('Pilih data dari master data (Merk, Tipe, Kelas).')
                     ->schema([
@@ -32,21 +30,9 @@ class MobilForm
                             ->required(),
 
                         Select::make('class_id')
-                            ->relationship('carclass', 'class_nama') // Pastikan file Model sudah direname jadi CarClass.php
+                            ->relationship('carclass', 'class_nama') 
                             ->label('Kelas')
                             ->required(),
-
-
-                        // select::make('class_id')
-                        //     ->relationship('carclass', 'tipe_nama')
-                        //     ->label('Tipe Bodi')
-                        //     ->required(),
-
-                //         // 3. Kelas (Dropdown) - SAYA UBAH DARI TEXTINPUT JADI SELECT
-                // TextInput::make('class_id')
-
-                //     ->required()
-                //     ->numeric(),
 
                         // 4. Status (Dropdown)
                         Select::make('status_id')
@@ -54,9 +40,8 @@ class MobilForm
                             ->label('Status Ketersediaan')
                             ->default(1)
                             ->required(),
-                    ])->columns(2), // Tampil 2 kolom bersandingan
+                    ])->columns(2), 
 
-                // --- KOTAK 2: Detail Fisik & Harga ---
                 Section::make('Detail Kendaraan')
                     ->schema([
                         TextInput::make('mobil_plat')

@@ -18,7 +18,8 @@ class HistoryRentalResource extends Resource
 {
     protected static ?string $model = HistoryRental::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clock';
+    
 
     protected static ?string $recordTitleAttribute = 'history_id';
 

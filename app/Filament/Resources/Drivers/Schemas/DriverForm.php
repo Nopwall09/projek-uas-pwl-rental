@@ -12,7 +12,6 @@ class DriverForm
     {
         return $schema
             ->components([
-                // Mengelompokkan input ke dalam kotak (Section) agar lebih rapi
                 Section::make('Identitas Driver')
                     ->description('Masukkan data pribadi pengemudi sesuai dokumen asli.')
                     ->schema([
@@ -34,9 +33,9 @@ class DriverForm
                             ->tel()
                             ->placeholder('Contoh: 08123456789')
                             ->required()
-                            ->prefix('+62'), // Memberi awalan otomatis
+                            ->prefix('+62'), 
                     ])
-                    ->columns(2), // Membuat tampilan menjadi 2 kolom (Nama di kiri, SIM di kanan)
+                    ->columns(2), 
             ]);
     }
 }

@@ -16,7 +16,7 @@ class HistoryRentalsTable
     {
         return $table
             ->columns([
-                // Kolom ID (Kode Unik)
+                // Kolom ID 
                 TextColumn::make('history_id')
                     ->label('ID Transaksi')
                     ->fontFamily('mono')
@@ -24,7 +24,7 @@ class HistoryRentalsTable
                     ->searchable()
                     ->sortable(),
 
-                // Kolom Nama Penyewa (Relasi User)
+                // Kolom Nama Penyewa 
                 TextColumn::make('user.name')
                     ->label('Penyewa')
                     ->icon('heroicon-m-user')
@@ -36,32 +36,29 @@ class HistoryRentalsTable
                     ->limit(30)
                     ->searchable(),
 
-                // Kolom Status (Warna-warni)
+                // Kolom Status 
                 TextColumn::make('status_book')
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'completed' => 'success', // Hijau
-                        'confirmed' => 'info',    // Biru
-                        'pending'   => 'warning', // Kuning
-                        'canceled'  => 'danger',  // Merah
+                        'completed' => 'success', 
+                        'confirmed' => 'info',    
+                        'pending'   => 'warning', 
+                        'canceled'  => 'danger',  
                         default     => 'gray',
                     }),
 
                 // Kolom Waktu (Format Rapi)
                 TextColumn::make('waktu')
-                    ->label('Waktu Kejadian')
+                    ->label('Tanggal')
                     ->dateTime('d M Y, H:i') 
                     ->sortable(),
             ])
             ->filters([
-                // Filter bisa ditambahkan nanti
             ])
-            // ✅ GUNAKAN 'actions' (Standar V4)
             ->recordActions([
                 EditAction::make(),
             ])
-            // GUNAKAN 'bulkActions' (JANGAN 'toolbarActions')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

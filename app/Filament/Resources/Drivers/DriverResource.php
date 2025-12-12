@@ -17,11 +17,14 @@ class DriverResource extends Resource
 {
     protected static ?string $model = Driver::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user';
+
+    protected static ?string $pluralModelLabel = 'Data Driver';
+
+    protected static ?string $modelLabel = 'Driver Baru';
 
     public static function form(Schema $schema): Schema
     {
-        // Mengarahkan konfigurasi form ke file DriverForm yang baru kita buat
         return \App\Filament\Resources\Drivers\Schemas\DriverForm::configure($schema);
     }
 

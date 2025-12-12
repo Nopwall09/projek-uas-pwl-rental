@@ -49,11 +49,9 @@ class MobilsTable
             ->filters([
                 //
             ])
-            // GUNAKAN 'actions' (JANGAN 'recordActions')
             ->recordActions([
                 EditAction::make(),
             ])
-            // GUNAKAN 'bulkActions' (JANGAN 'toolbarActions')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
