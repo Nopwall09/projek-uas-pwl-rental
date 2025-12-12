@@ -17,8 +17,4 @@ class Rules extends Model
         'rules',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'mempunyai_rules', 'rules_id', 'user_id');
-    }
 }
