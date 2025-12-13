@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 /* ini cuman buat tes tar ganti aja*/
-Route::get('/home', function () {
+Route::get('/', function () {
     return view('home');
 });
 
@@ -33,7 +33,7 @@ Route::get('/profil', function () {
 
 Route::get('/login', function () {
     return view('auth/login');
-});
+}); 
 
 /* ------------------------------------------------------------*/
 

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('tipe_id');
             
+            // other columns
+            $table->string('mobil_image')->nullable();
             $table->enum('Transmisi', ['Manual', 'Matic']);
             $table->string('mobil_warna', 50);
             $table->string('mobil_plat', 30);

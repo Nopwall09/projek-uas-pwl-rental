@@ -18,6 +18,7 @@ class Mobil extends Model
         'status_id',
         'class_id',
         'tipe_id',
+        'mobil_image',
         'Transmisi',
         'mobil_warna',
         'mobil_plat',
