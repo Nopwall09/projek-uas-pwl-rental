@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Filament\Resources\Mobils\Tables;
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
 
 
 class MobilsTable
@@ -14,6 +15,10 @@ class MobilsTable
     {
         return $table
             ->columns([
+                ImageColumn::make('mobil_image')
+                    ->label('Foto mobil')
+                    ->square(), // atau ->circular() untuk bulat
+
                 // Kolom-kolom tabel kamu
                 TextColumn::make('merk.merk_nama')
                     ->label('Merk')
