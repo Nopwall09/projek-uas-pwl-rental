@@ -20,7 +20,7 @@ return new class extends Migration
 
             // base table
             $table->date ('tanggal_transaksi');
-            $table->enum('status', ['berhasi', 'pending', 'gagal']);
+            $table->enum('status', ['berhasi', 'pending', 'gagal'])->default('pending');
             $table->integer('total_bayar');
 
             // relasi
