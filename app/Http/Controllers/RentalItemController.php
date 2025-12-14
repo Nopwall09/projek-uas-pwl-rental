@@ -17,7 +17,7 @@ class RentalItemController extends Controller
     {
         // Mobil tersedia & disewa (ENUM COLUMN, BUKAN RELATION)
         $mobilTersedia = Mobil::where('mobil_status', 'Tersedia')->count();
-        $mobilDisewa   = Mobil::where('mobil_status', 'Disewa')->count();
+        $mobilDisewa = Mobil::where('mobil_status', 'Disewa')->count();
 
         // Transaksi hari ini
         $transaksiHariIni = RentalItem::whereDate('tgl', Carbon::today())->count();
@@ -80,8 +80,8 @@ class RentalItemController extends Controller
 
         $validated = $request->validate([
             'lama_rental' => 'required|string|max:25',
-            'tgl'         => 'required|date',
-            'total_sewa'  => 'required|numeric|min:0',
+            'tgl' => 'required|date',
+            'total_sewa' => 'required|numeric|min:0',
         ]);
 
         $rental->update($validated);
@@ -90,4 +90,21 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
+    public function laporan()
+    {
+        $laporan = RentalItem::with(['user', 'mobil', 'driver'])->orderBy('tgl', 'desc')->paginate(10);
+        return view('laporan.index', compact('laporan'));
+    }
+
+    public function tampilTransaksi()
+    {
+        $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
+            ->orderBy('tgl', 'desc')
+            ->paginate(10);
+        
+            $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+
+        return view('transaksi.index', compact('transaksis', 'mobils'));
+    }
+
 }

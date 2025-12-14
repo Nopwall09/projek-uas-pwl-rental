@@ -15,6 +15,12 @@ class MobilController extends Controller
 
         return response()->json($mobils);
     }
+    public function tampilMobil()
+    {
+        $mobils = Mobil::with(['merk', 'class', 'tipe'])->paginate(10); // Bisa tambah relasi lain kalau perlu
+
+        return view('kasir.mobil', compact('mobils'));
+    }
 
     public function store(Request $request)
     {
