@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,12 +11,14 @@ class Mobil extends Model
 
     protected $table = 'mobil';
     protected $primaryKey = 'mobil_id';
+    public $timestamps = false; 
 
     protected $fillable = [
         'merk_id',
         'status_id',
         'class_id',
         'tipe_id',
+        'mobil_image',
         'Transmisi',
         'mobil_warna',
         'mobil_plat',
@@ -37,7 +40,7 @@ class Mobil extends Model
         return $this->belongsTo(Status::class, 'status_id', 'status_id');
     }
 
-    public function class()
+    public function carclass()
     {
         return $this->belongsTo(CarClass::class, 'class_id', 'class_id');
     }
@@ -56,6 +59,7 @@ class Mobil extends Model
     {
         return $this->hasMany(RentalItem::class, 'mobil_id', 'mobil_id');
     }
+
     public function seat()
     {
         return $this->belongsTo(Seat::class, 'seat_id', 'seat_id');

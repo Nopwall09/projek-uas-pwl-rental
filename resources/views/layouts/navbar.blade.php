@@ -16,7 +16,7 @@
             <li><a href="{{ url('/home') }}">HOME</a></li>
             <li><a href="{{ url('/katalog') }}">KATALOG MOBIL</a></li>
             <li><a href="https://wa.me/6282333318107">KONTAK</a></li>
-            <li><a href="{{ url('/login') }}">LOGIN</a></li>
+            <li><a href="{{ route('login') }}">LOGIN</a></li>
         </ul>
     </nav>
 </header>
