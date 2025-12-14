@@ -80,10 +80,9 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
-
-    Route::get('/kasir/dashboard', function () {
-        return view('kasir.dashboard');
-    })->name('kasir.dashboard');
+    Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
+        ->name('kasir.dashboard')
+        ->middleware('kasir');
 
     //Buat CREATE
     Route::get('/kasir/create', [RentalItemController::class, 'create'])
