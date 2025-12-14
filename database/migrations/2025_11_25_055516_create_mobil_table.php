@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('mobil_image')->nullable();
             $table->enum('Transmisi', ['Manual', 'Matic']);
             $table->string('mobil_warna', 50);
+            $table->enum('mobil_status', ['Tersedia', 'Disewa']);
             $table->string('mobil_plat', 30);
             $table->string('mobil_tahun', 4);
             $table->decimal('harga_rental', 10, 2);

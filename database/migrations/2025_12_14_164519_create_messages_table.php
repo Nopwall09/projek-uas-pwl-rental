@@ -9,16 +9,21 @@ return new class extends Migration {
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->change();
+
+            $table->unsignedBigInteger('user_id')->nullable();
+
+            $table->foreign('user_id')
+                ->references('user_id') // ⬅️ PENTING
+                ->on('users')
+                ->cascadeOnDelete();
+
             $table->enum('sender_role', ['user', 'admin']);
             $table->text('message');
             $table->timestamps();
-
-            $table->foreign('user_id')
-                ->references('user_id')
-                ->on('users')
-                ->onDelete('cascade');
         });
+
+
+
     }
 
     public function down(): void
