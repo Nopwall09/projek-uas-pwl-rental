@@ -7,9 +7,43 @@ use App\Models\Mobil;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
 
 class RentalItemController extends Controller
 {
+    public function index()
+    {
+        $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
+            ->orderBy('tgl', 'desc')
+            ->paginate(10);
+        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+        return view('transaksi.index', compact('transaksis', 'mobils'));
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'mobil_id' => 'required|exists:mobil,mobil_id',
+            'lama_rental' => 'required|numeric|min:1',
+            'total_sewa' => 'required|numeric|min:0',
+            'pilihan' => 'required|string',
+            'tgl' => 'required|date',
+            'booking_source' => 'required|in:online,offline',
+            'jaminan' => 'required|string|max:50',
+        ]);
+
+        $rental = RentalItem::create($validated);
+
+        // update status mobil jadi disewa
+        $mobil = Mobil::find($validated['mobil_id']);
+        if ($mobil) {
+            $mobil->update(['mobil_status' => 'Disewa']);
+        }
+
+        return redirect()->route('kasir.tampilTransaksi')
+            ->with('success', 'Transaksi berhasil ditambahkan!');
+    }
+
     /* =====================================================
      | DASHBOARD KASIR
      ===================================================== */
@@ -101,10 +135,15 @@ class RentalItemController extends Controller
         $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
             ->orderBy('tgl', 'desc')
             ->paginate(10);
-        
-            $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+
+        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
 
         return view('transaksi.index', compact('transaksis', 'mobils'));
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
 
 }

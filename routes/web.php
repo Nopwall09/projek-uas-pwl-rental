@@ -121,12 +121,13 @@ Route::middleware(['kasir'])->group(function () {
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])
     ->name('kasir.destroy');
 
-    Route::get('/laporan', [RentalItemController::class, 'laporan'])
+     Route::get('/laporan', [RentalItemController::class, 'laporan'])
     ->name('laporan.index');
 
-    Route::get('/mobil', [MobilController::class, 'tampilMobil'])
+     Route::get('/mobil', [MobilController::class, 'tampilMobil'])
     ->name('kasir.mobil');
 
-    Route::get('/transaksi', [RentalItemController::class, 'tampilTransaksi'])
+     Route::get('/transaksi', [RentalItemController::class, 'tampilTransaksi'])
     ->name('transaksi.index');
+
 });
