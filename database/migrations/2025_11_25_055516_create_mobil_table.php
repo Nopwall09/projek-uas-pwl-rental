@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('mobil_id');
 
             // columns foreign keys
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('merk_id');
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('tipe_id');
@@ -31,6 +32,7 @@ return new class extends Migration
 
             // relation
             $table->foreign('merk_id')->references('merk_id')->on('merk')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('feedback_id')->references('feedback_id')->on('feedback')->onDelete('cascade');
             $table->foreign('class_id')->references('class_id')->on('class')->onDelete('cascade');
             $table->foreign('tipe_id')->references('tipe_id')->on('tipe')->onDelete('cascade');

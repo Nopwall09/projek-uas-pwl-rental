@@ -9,8 +9,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users';
     protected $primaryKey = 'user_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
 
     protected $fillable = [
         'name',
@@ -36,11 +38,14 @@ class User extends Authenticatable
         return $this->hasMany(RentalItem::class, 'user_id', 'user_id');
     }
 
-    public function logAktivitas()
-    {
-        return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
-    }
+<<<<<<< HEAD
+=======
+    // public function logAktivitas()
+    // {
+    //     // return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
+    // }
 
+>>>>>>> 41dd29cb4aeeab5cb82486057370624bea27b22f
     public function historyRentals()
     {
         return $this->hasMany(HistoryRental::class, 'user_id', 'user_id');
