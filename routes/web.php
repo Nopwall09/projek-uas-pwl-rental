@@ -100,7 +100,7 @@ Route::middleware(['kasir'])->group(function () {
     Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
         ->name('kasir.dashboard')
         ->middleware('kasir');
-
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     //Buat CREATE
     Route::get('/kasir/create', [RentalItemController::class, 'create'])
         ->name('kasir.create');
