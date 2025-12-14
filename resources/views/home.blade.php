@@ -44,70 +44,26 @@
 
         <div class="grid-mobil">
 
-            <!-- Card item  -->
+        @foreach ($mobils as $mobil)
             <div class="card">
-                <img src="{{ asset('img/showroom.jpg') }}">
-                <h4 style="margin-top:15px;">Brio</h4>
-                <a href="{{ url('/pemesanan') }}">
-                <button>Booking</button>
+                <img src="{{ asset('storage/'.$mobil->mobil_image) }}"
+                    alt="{{ $mobil->merk->merk_nama ?? 'Mobil' }}">
+
+                <h4 style="margin-top:15px;">
+                    {{ $mobil->merk->merk_nama }}
+                    {{ $mobil->tipe->tipe_nama ?? '' }}
+                </h4>
+
+                <p>Rp {{ number_format($mobil->harga_rental, 0, ',', '.') }} / hari</p>
+
+                <a href="{{ url('/pemesanan/'.$mobil->mobil_id) }}">
+                    <button>Booking</button>
                 </a>
             </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
-
-            <div class="card">
-                <img>
-                <h4 style="margin-top:15px;">Brio</h4>
-                <button>Booking</button>
-            </div>
+        @endforeach
 
         </div>
+
     </section>
 
 
@@ -133,6 +89,119 @@
             </div>
         </div>
     </section>   
+    <!-- jika pakai Font Awesome -->
+    <div id="livechat-button">💬</div>
+    <!-- Chat Popup -->
+    <div id="chat-popup">
+        <div class="chat-header">
+            <span>Live Chat</span>
+            <button id="chat-close">✕</button>
+        </div>
+
+        <div class="chat-body">
+            <!-- Pesan masuk -->
+            <div class="chat-message incoming">
+                <p>Halo 👋 Ada yang bisa kami bantu?</p>
+            </div>
+
+        </div>
+
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Ketik pesan..." />
+            <button id="send-btn">Kirim</button>
+        </div>
+    </div>
+    <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatBtn = document.getElementById('livechat-button');
+        const chatPopup = document.getElementById('chat-popup');
+        const chatClose = document.getElementById('chat-close');
+        const sendBtn = document.getElementById('send-btn');
+        const chatInput = document.getElementById('chat-input');
+        const chatBody = document.querySelector('.chat-body');
+
+        chatBtn.addEventListener('click', function () {
+            chatPopup.style.display = 'flex';
+            loadMessages();
+        });
+        chatClose.addEventListener('click', () => chatPopup.style.display = 'none');
+
+        function loadMessages() {
+            fetch('/chat/messages')
+                .then(res => res.json())
+                .then(data => {
+                    chatBody.innerHTML = '';
+                    
+                    data.forEach(msg => {
+                        const div = document.createElement('div');
+                        div.classList.add(
+                            'chat-message',
+                            msg.sender_role === 'admin' ? 'incoming' : 'outgoing'
+                        );
+                        div.innerHTML = `<p>${msg.message}</p>`;
+                        chatBody.appendChild(div);
+                    });
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                });
+        }
+        // ⬇️ PERBAIKAN DI SINI
+        sendBtn.addEventListener('click', function () {
+            const text = chatInput.value.trim();
+            if (text === '') return;
+
+            // 1️⃣ Tampilkan pesan langsung (OUTGOING)
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('chat-message', 'outgoing');
+            msgDiv.innerHTML = `<p>${text}</p>`;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // 2️⃣ Kirim ke server
+            fetch('/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ message: text })
+            });
+
+            chatInput.value = '';
+        });
+
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendBtn.click();
+        });
+
+        // ================= PUSHER =================
+        const pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
+            cluster: '{{ env("PUSHER_APP_CLUSTER") }}',
+            encrypted: true
+        });
+
+        const channel = pusher.subscribe('private-chat');
+        channel.bind('App\\Events\\MessageSent', function (data) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add(
+                'chat-message',
+                data.message.sender_role === 'admin' ? 'incoming' : 'outgoing'
+            );
+            msgDiv.innerHTML = `<p>${data.message.message}</p>`;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        });
+
+        // const channel = pusher.subscribe(
+        //     'private-chat-user-{{ auth()->user()->user_id }}'
+        // );
+
+        
+    });
+    </script>
+
+
+
     <script src="script.js"></script>
 </body>
 </html>
