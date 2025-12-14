@@ -36,6 +36,30 @@ class RentalItemController extends Controller
         $rental = RentalItem::with(['user', 'mobil', 'driver', 'transaksi', 'feedback'])->findOrFail($id);
         return response()->json($rental);
     }
+    public function store_offline(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_Pelanggan' => 'required|string|max:100',
+            'mobil_id' => 'required|exists:mobil,mobil_id',
+            'driver_id' => 'nullable|exists:driver,driver_id',
+            'lama_rental' => 'required|string|max:25',
+            'pilihan' => 'required|string|max:30',
+            'tgl' => 'required|date',
+            'total_sewa' => 'required|numeric|min:0',
+            'jaminan' => 'required|string|max:30',
+        ]);
+
+        $validated['booking_source'] = 'offline';
+        $validated['user_id'] = null;
+
+        $rental = RentalItem::create($validated);
+
+        return response()->json([
+            'message' => 'Rental offline berhasil dibuat',
+            'data' => $rental
+        ], 201);
+    }
+
 
     public function update(Request $request, $id)
     {
@@ -65,5 +89,17 @@ class RentalItemController extends Controller
 
         return response()->json(['message' => 'Rental berhasil dihapus']);
     }
+    public function destroy_offline($id)
+    {
+        $rental = RentalItem::where('booking_source', 'offline')
+            ->findOrFail($id);
+
+        $rental->delete();
+
+        return response()->json([
+            'message' => 'Rental offline berhasil dihapus'
+        ]);
+    }
+
 }
 

@@ -107,7 +107,6 @@
                         <legend>Fasilitas Tambahan :</legend>
                         <label><input type="checkbox" name="driver" value="with-driver"> Dengan Driver</label>
                         <label><input type="checkbox" name="nodriver" value="without-driver"> Tanpa Driver</label>
-                        <label><input type="checkbox" name="allin" value="all-in"> All in</label>
                     </fieldset>
 
                     <div class="total-line">
@@ -115,10 +114,9 @@
                         <span id="totalPrice">Rp. 0</span>
                     </div>
 
-                    <a href="{{ url('/Konfirmasi-pembayaran') }}">
-                    <button class="btn-book" id="bookBtn">Pesan Sekarang</button>
-                    </a>
+                    
                 </form>
+                <button class="btn-book" id="bookBtn" href="{{ route('Konfirmasi') }}">Pesan Sekarang</button>
             </aside>
         </div>
     </main>

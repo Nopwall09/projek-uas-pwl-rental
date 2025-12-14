@@ -65,3 +65,15 @@
     font-weight: 600;
     text-decoration: none;
 }
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #163a63;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}

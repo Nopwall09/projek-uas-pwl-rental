@@ -16,16 +16,17 @@ return new class extends Migration
             $table->id('rental_id');
 
             // Foreign Keys
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('mobil_id');
             $table->unsignedBigInteger('driver_id')->nullable();
 
             // base columns
+            $table->string('nama_Pelanggan', 100)->nullable();
             $table->string('lama_rental', 25);
             $table->string('pilihan', 30);
             $table->date('tgl');
             $table->decimal('total_sewa', 10, 2);
-            $table->enum('booking_source', ['online', 'offline']);
+            $table->enum('booking_source', ['online', 'offline'])->default('offline');
             $table->string('jaminan', 30);
 
             //relasi

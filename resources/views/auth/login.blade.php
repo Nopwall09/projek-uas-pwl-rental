@@ -13,7 +13,7 @@
             <p class="error-msg">{{ session('error') }}</p>
         @endif
 
-        <<form method="POST" action="{{ route('login.process') }}">
+        <form method="POST" action="{{ route('login.process') }}">
             @csrf
 
             <label>Email</label>
@@ -24,8 +24,6 @@
 
             <button type="submit" class="btn-login">Login</button>
         </form>
-
-
 
         <p class="register-text">
             Belum punya akun?
