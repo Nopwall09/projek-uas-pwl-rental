@@ -24,8 +24,13 @@ class Feedback extends Model
         'tanggal_feedback' => 'date',
     ];
 
-    public function rentalItem()
+    public function mobil()
+    {
+        return $this->hasMany(Mobil::class, 'feedback_id', 'feedback_id');
+    }
+    public function rental()
     {
         return $this->belongsTo(RentalItem::class, 'rental_id', 'rental_id');
     }
+
 }

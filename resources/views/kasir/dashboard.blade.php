@@ -1,9 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Dashboard Kasir')
 
-
 @section('content')
-
 <div class="container-fluid">
 
     <!-- Header + Action -->
@@ -11,10 +9,10 @@
         <h1 class="mb-0">Dashboard Kasir</h1>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('kasir.transaksi') }}" class="btn btn-primary">
+            <a href="{{ route('kasir.create') }}" class="btn btn-primary">
                 + Transaksi Baru
             </a>
-            <a href="#" class="btn btn-outline-secondary">
+            <a href="{{ route('kasir.index') }}" class="btn btn-outline-secondary">
                 Data Transaksi
             </a>
         </div>
@@ -24,41 +22,39 @@
     <div class="row g-3 mb-4">
 
         <div class="col-md-3">
-            <a href="{{ url('/mobil') }}" class="text-decoration-none text-dark">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <p class="text-muted mb-1">Mobil Tersedia</p>
-                        <h3 class="fw-bold">12</h3>
-                    </div>
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Mobil Tersedia</p>
+                    <h3 class="fw-bold">{{ $mobilTersedia }}</h3>
                 </div>
-            </a>
+            </div>
         </div>
 
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <p class="text-muted mb-1">Mobil Disewa</p>
-                    <h3 class="fw-bold">8</h3>
+                    <h3 class="fw-bold">{{ $mobilDisewa }}</h3>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <a href="{{ url('/transaksi') }}" class="text-decoration-none text-dark">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <p class="text-muted mb-1">Transaksi Hari Ini</p>
-                        <h3 class="fw-bold">5</h3>
-                    </div>
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Transaksi Hari Ini</p>
+                    <h3 class="fw-bold">{{ $transaksiHariIni }}</h3>
                 </div>
-            </a>
+            </div>
         </div>
 
         <div class="col-md-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <p class="text-muted mb-1">Pendapatan Hari Ini</p>
-                    <h3 class="fw-bold">Rp 2.500.000</h3>
+                    <h5 class="fw-bold">
+                        Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}
+                    </h5>
                 </div>
             </div>
         </div>
@@ -68,9 +64,10 @@
     <!-- Tabel Sewa Aktif -->
     <div class="card shadow-sm">
         <div class="card-body">
+
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title mb-0">Sewa Aktif</h5>
-                <a href="{{ url(path: '/transaksi') }}" class="btn btn-sm btn-outline-primary">
+                <a href="{{ route('kasir.index') }}" class="btn btn-sm btn-outline-primary">
                     Lihat Semua
                 </a>
             </div>
@@ -83,38 +80,53 @@
                         <th>Tanggal Sewa</th>
                         <th>Jatuh Tempo</th>
                         <th>Status</th>
-                        <th width="180">Aksi</th>
+                        <th width="200">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Andi</td>
-                        <td>Avanza</td>
-                        <td>10-12-2025</td>
-                        <td>15-12-2025</td>
-                        <td><span class="badge bg-warning">Disewa</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-success">Selesai</a>
-                            <a href="#" class="btn btn-sm btn-warning">Perpanjang</a>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td>Budi</td>
-                        <td>Innova</td>
-                        <td>09-12-2025</td>
-                        <td>14-12-2025</td>
-                        <td><span class="badge bg-danger">Telat</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-success">Selesai</a>
-                            <a href="#" class="btn btn-sm btn-warning">Perpanjang</a>
-                        </td>
-                    </tr>
+                <tbody>
+                    @forelse ($sewaAktif as $item)
+                        <tr>
+                            <td>{{ $item->user_id }}</td>
+                            <td>{{ $item->mobil->nama_mobil ?? '-' }}</td>
+                            <td>{{ $item->tgl }}</td>
+                            <td>{{ $item->jatuh_tempo }}</td>
+                            <td>
+                                <span class="badge bg-warning">Disewa</span>
+                            </td>
+                            <td class="d-flex gap-1">
+
+                                <!-- SELESAI (DELETE) -->
+                                <form action="{{ route('kasir.destroy', $item->rental_id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Selesaikan sewa? Mobil akan tersedia kembali.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-success">
+                                        Selesai
+                                    </button>
+                                </form>
+
+                                <!-- PERPANJANG -->
+                                <a href="{{ route('kasir.update', $item->rental_id) }}"
+                                   class="btn btn-sm btn-warning">
+                                    Perpanjang
+                                </a>
+
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                Tidak ada sewa aktif
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
+
         </div>
     </div>
 
 </div>
-
 @endsection

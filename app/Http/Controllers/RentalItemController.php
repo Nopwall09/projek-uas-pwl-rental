@@ -1,105 +1,113 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\RentalItem;
+use App\Models\Mobil;
+use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RentalItemController extends Controller
 {
-    public function index()
+    /* =====================================================
+     | DASHBOARD KASIR
+     ===================================================== */
+    public function dashboard()
     {
-        $rentals = RentalItem::with(['user', 'mobil', 'driver'])->paginate(10);
-        return response()->json($rentals);
+        // Mobil tersedia & disewa (ENUM COLUMN, BUKAN RELATION)
+        $mobilTersedia = Mobil::where('mobil_status', 'Tersedia')->count();
+        $mobilDisewa = Mobil::where('mobil_status', 'Disewa')->count();
+
+        // Transaksi hari ini
+        $transaksiHariIni = RentalItem::whereDate('tgl', Carbon::today())->count();
+
+        // Pendapatan hari ini
+        $pendapatanHariIni = RentalItem::whereDate('tgl', Carbon::today())
+            ->sum('total_sewa');
+
+        // Sewa aktif (mobil masih disewa)
+        $sewaAktif = RentalItem::with(['mobil', 'user'])
+            ->whereHas('mobil', function ($q) {
+                $q->where('mobil_status', 'Disewa');
+            })
+            ->orderBy('tgl', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('kasir.dashboard', compact(
+            'mobilTersedia',
+            'mobilDisewa',
+            'transaksiHariIni',
+            'pendapatanHariIni',
+            'sewaAktif'
+        ));
     }
 
-    public function store(Request $request)
+    /* =====================================================
+     | SELESAIKAN SEWA
+     ===================================================== */
+    public function destroy($id)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'mobil_id' => 'required|exists:mobil,mobil_id',
-            'driver_id' => 'nullable|exists:driver,driver_id',
-            'lama_rental' => 'required|string|max:25',
-            'pilihan' => 'required|string|max:30',
-            'tgl' => 'required|date',
-            'total_sewa' => 'required|numeric|min:0',
-            'booking_source' => 'required|in:online,offline',
-            'jaminan' => 'required|string|max:30',
-        ]);
+        $rental = RentalItem::with('mobil')->findOrFail($id);
 
-        $rental = RentalItem::create($validated);
+        // Kembalikan status mobil
+        if ($rental->mobil) {
+            $rental->mobil->update([
+                'mobil_status' => 'Tersedia'
+            ]);
+        }
 
-        return response()->json(['message' => 'Rental berhasil dibuat', 'data' => $rental], 201);
+        $rental->delete();
+
+        return redirect()
+            ->route('kasir.dashboard')
+            ->with('success', 'Sewa berhasil diselesaikan');
     }
 
-    public function show($id)
+    /* =====================================================
+     | EDIT / PERPANJANG
+     ===================================================== */
+    public function edit($id)
     {
-        $rental = RentalItem::with(['user', 'mobil', 'driver', 'transaksi', 'feedback'])->findOrFail($id);
-        return response()->json($rental);
+        $rental = RentalItem::with('mobil', 'user')->findOrFail($id);
+        return view('kasir.update', compact('rental'));
     }
-    public function store_offline(Request $request)
-    {
-        $validated = $request->validate([
-            'nama_Pelanggan' => 'required|string|max:100',
-            'mobil_id' => 'required|exists:mobil,mobil_id',
-            'driver_id' => 'nullable|exists:driver,driver_id',
-            'lama_rental' => 'required|string|max:25',
-            'pilihan' => 'required|string|max:30',
-            'tgl' => 'required|date',
-            'total_sewa' => 'required|numeric|min:0',
-            'jaminan' => 'required|string|max:30',
-        ]);
-
-        $validated['booking_source'] = 'offline';
-        $validated['user_id'] = null;
-
-        $rental = RentalItem::create($validated);
-
-        return response()->json([
-            'message' => 'Rental offline berhasil dibuat',
-            'data' => $rental
-        ], 201);
-    }
-
 
     public function update(Request $request, $id)
     {
         $rental = RentalItem::findOrFail($id);
 
         $validated = $request->validate([
-            'user_id' => 'sometimes|required|exists:users,user_id',
-            'mobil_id' => 'sometimes|required|exists:mobil,mobil_id',
-            'driver_id' => 'nullable|exists:driver,driver_id',
-            'lama_rental' => 'sometimes|required|string|max:25',
-            'pilihan' => 'sometimes|required|string|max:30',
-            'tgl' => 'sometimes|required|date',
-            'total_sewa' => 'sometimes|required|numeric|min:0',
-            'booking_source' => 'sometimes|required|in:online,offline',
-            'jaminan' => 'sometimes|required|string|max:30',
+            'lama_rental' => 'required|string|max:25',
+            'tgl' => 'required|date',
+            'total_sewa' => 'required|numeric|min:0',
         ]);
 
         $rental->update($validated);
 
-        return response()->json(['message' => 'Rental berhasil diupdate', 'data' => $rental]);
+        return redirect()
+            ->route('kasir.dashboard')
+            ->with('success', 'Sewa berhasil diperpanjang');
     }
 
-    public function destroy($id)
+    public function pesananSaya()
     {
-        $rental = RentalItem::findOrFail($id);
-        $rental->delete();
+        $rentals = RentalItem::with([
+            'mobil.merk',
+            'mobil.carclass',
+            'mobil.tipe',
+            'feedback'
+        ])
+        ->where('user_id', Auth::id())
+        ->orderBy('tgl', 'desc')
+        ->get();
 
-        return response()->json(['message' => 'Rental berhasil dihapus']);
+        return view('profile.pesanan-saya', compact('rentals'));
     }
-    public function destroy_offline($id)
-    {
-        $rental = RentalItem::where('booking_source', 'offline')
-            ->findOrFail($id);
+    
 
-        $rental->delete();
-
-        return response()->json([
-            'message' => 'Rental offline berhasil dihapus'
-        ]);
-    }
 
 }
-

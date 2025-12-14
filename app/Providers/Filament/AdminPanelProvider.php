@@ -18,7 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
+use App\Filament\Auth\LogoutResponse as CustomLogoutResponse;
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -26,6 +26,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->login()
+            ->default()
             ->colors([
                 'primary' => Color::Amber,
             ])
