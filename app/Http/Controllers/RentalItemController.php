@@ -8,11 +8,7 @@ use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-<<<<<<< HEAD
-use App\Models\User;
-=======
 use Illuminate\Support\Facades\Auth;
->>>>>>> 710e65fe2fcf6ea2b6c7d5cf74c7cabe43fd74f0
 
 class RentalItemController extends Controller
 {
@@ -129,7 +125,7 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
-<<<<<<< HEAD
+
 
     public function pesananSaya()
     {
@@ -147,7 +143,7 @@ class RentalItemController extends Controller
     }
     
 
-=======
+
     public function laporan()
     {
         $laporan = RentalItem::with(['user', 'mobil', 'driver'])->orderBy('tgl', 'desc')->paginate(10);
@@ -164,14 +160,4 @@ class RentalItemController extends Controller
 
         return view('transaksi.index', compact('transaksis', 'mobils'));
     }
-<<<<<<< HEAD
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
-
-=======
->>>>>>> 41dd29cb4aeeab5cb82486057370624bea27b22f
->>>>>>> 710e65fe2fcf6ea2b6c7d5cf74c7cabe43fd74f0
-
 }
