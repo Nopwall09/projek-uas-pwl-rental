@@ -20,7 +20,7 @@
         </div>
 
         <div class="mb-3">
-            <label>Lama Rental</label>
+            <label>Durasi Rental</label>
             <input type="text" name="lama_rental" class="form-control">
         </div>
 
