@@ -10,28 +10,23 @@ use Illuminate\Support\Facades\DB;
 class RentalItemController extends Controller
 {
     public function dashboard()
-    {
-        return view('kasir.dashboard', [
+{
+    return view('kasir.dashboard', [
+        'mobilTersedia' => Mobil::where('status', 'Tersedia')->count(),
+        'mobilDisewa' => Mobil::where('status', 'Disewa')->count(),
 
-            'mobilTersedia' => Mobil::whereHas('status', function ($q) {
-                $q->where('nama_status', 'Tersedia');
-            })->count(),
+        'transaksiHariIni' => RentalItem::whereDate('created_at', today())->count(),
 
-            'mobilDisewa' => Mobil::whereHas('status', function ($q) {
-                $q->where('nama_status', 'Disewa');
-            })->count(),
+        'pendapatanHariIni' => RentalItem::whereDate('created_at', today())
+            ->sum('total_sewa'),
 
-            'transaksiHariIni' => RentalItem::whereDate('created_at', today())->count(),
-
-            'pendapatanHariIni' => RentalItem::whereDate('created_at', today())
-                ->sum('total_sewa'),
-
-            'sewaAktif' => RentalItem::with('mobil')
-                ->orderBy('tgl', 'desc')
-                ->limit(10)
-                ->get(),
-        ]);
-    }
+        'sewaAktif' => RentalItem::with('mobil')
+            ->where('status', 'aktif')
+            ->orderBy('tgl', 'desc')
+            ->limit(10)
+            ->get()
+    ]);
+}
     public function index()
     {
         $rentals = RentalItem::with(['user', 'mobil', 'driver'])->paginate(10);
@@ -112,28 +107,28 @@ class RentalItemController extends Controller
     }
 
     public function destroy($id)
-    {
-        DB::transaction(function () use ($id) {
+{
+    DB::transaction(function () use ($id) {
 
-            $rental = RentalItem::findOrFail($id);
+        $rental = RentalItem::findOrFail($id);
 
-            // ambil mobil
-            $mobil = Mobil::find($rental->mobil_id);
+        // ambil mobil
+        $mobil = Mobil::find($rental->mobil_id);
 
-            // hapus transaksi
-            $rental->delete();
+        // hapus transaksi
+        $rental->delete();
 
-            // balikin status mobil
-            if ($mobil) {
-                $mobil->update([
-                    'status' => 'Tersedia'
-                ]);
-            }
-        });
+        // balikin status mobil
+        if ($mobil) {
+            $mobil->update([
+                'status' => 'Tersedia'
+            ]);
+        }
+    });
 
-        return redirect()->route('kasir.index')
-            ->with('success', 'Transaksi dihapus, mobil kembali tersedia');
-    }
+    return redirect()->route('kasir.index')
+        ->with('success', 'Transaksi dihapus, mobil kembali tersedia');
+}
 
     public function create()
     {
