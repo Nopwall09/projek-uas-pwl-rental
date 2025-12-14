@@ -10,29 +10,29 @@ Route::get('/home', function () {
     return view('home');
 });
 
-Route::get('katalog', function () {
-    return view('Katalog.index');
-});
+// Route::get('katalog', function () {
+//     return view('katalog/index');
+// });
 
-Route::get('pemesanan', function () {
-    return view('Pemesanan.index');
-});
+// Route::get('pemesanan', function () {
+//     return view('pemesanan/index');
+// });
 
-Route::get('mypesan', function () {
-    return view('Profil.pesanan-saya');
-});
+// Route::get('mypesan', function () {
+//     return view('profil/pesanan-saya');
+// });
 
-Route::get('Konfirmasi', function () {
-    return view('Pemesanan.konfirPesan');
-});
+// Route::get('Konfirmasi', function () {
+//     return view('pemesanan/konfirPesan');
+// });
 
-Route::get('Konfirmasi-pembayaran', function () {
-    return view('Pemesanan.konfirPesan');
-});
+// Route::get('Konfirmasi-pembayaran', function () {
+//     return view('pemesanan/konfirPesan');
+// });
 
-Route::get('/profil', function () {
-    return view('Profil.index');
-});
+// Route::get('/profil', function () {
+//     return view('profil/index');
+// });
 
 
 /*
