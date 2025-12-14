@@ -108,7 +108,7 @@
                                 </form>
 
                                 <!-- PERPANJANG -->
-                                <a href="{{ route('kasir.edit', $item->rental_id) }}"
+                                <a href="{{ route('kasir.update', $item->rental_id) }}"
                                    class="btn btn-sm btn-warning">
                                     Perpanjang
                                 </a>

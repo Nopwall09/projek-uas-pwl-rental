@@ -14,7 +14,6 @@ class RentalItemController extends Controller
      | DASHBOARD KASIR
      ===================================================== */
     public function dashboard()
-<<<<<<< HEAD
     {
         // Mobil tersedia & disewa (ENUM COLUMN, BUKAN RELATION)
         $mobilTersedia = Mobil::where('mobil_status', 'Tersedia')->count();
@@ -43,29 +42,6 @@ class RentalItemController extends Controller
             'pendapatanHariIni',
             'sewaAktif'
         ));
-=======
-{
-    return view('kasir.dashboard', [
-        'mobilTersedia' => Mobil::where('status', 'Tersedia')->count(),
-        'mobilDisewa' => Mobil::where('status', 'Disewa')->count(),
-
-        'transaksiHariIni' => RentalItem::whereDate('created_at', today())->count(),
-
-        'pendapatanHariIni' => RentalItem::whereDate('created_at', today())
-            ->sum('total_sewa'),
-
-        'sewaAktif' => RentalItem::with('mobil')
-            ->where('status', 'aktif')
-            ->orderBy('tgl', 'desc')
-            ->limit(10)
-            ->get()
-    ]);
-}
-    public function index()
-    {
-        $rentals = RentalItem::with(['user', 'mobil', 'driver'])->paginate(10);
-        return response()->json($rentals);
->>>>>>> bf34e9f2971cfe1f9454f1e0ba70a2465a966584
     }
 
     /* =====================================================
@@ -114,39 +90,4 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
-<<<<<<< HEAD
 }
-=======
-
-    public function destroy($id)
-{
-    DB::transaction(function () use ($id) {
-
-        $rental = RentalItem::findOrFail($id);
-
-        // ambil mobil
-        $mobil = Mobil::find($rental->mobil_id);
-
-        // hapus transaksi
-        $rental->delete();
-
-        // balikin status mobil
-        if ($mobil) {
-            $mobil->update([
-                'status' => 'Tersedia'
-            ]);
-        }
-    });
-
-    return redirect()->route('kasir.index')
-        ->with('success', 'Transaksi dihapus, mobil kembali tersedia');
-}
-
-    public function create()
-    {
-        $mobils = Mobil::orderBy('mobil_id')->get();
-
-        return view('kasir.create', compact('mobils'));
-    }
-}
->>>>>>> bf34e9f2971cfe1f9454f1e0ba70a2465a966584
