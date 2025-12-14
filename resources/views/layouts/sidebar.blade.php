@@ -12,19 +12,19 @@
             </li>
 
             <li class="nav-item">
-                <a href="/transaksi" class="nav-link text-white">
+                <a href="{{ route('transaksi.index') }}" class="nav-link text-white">
                     Transaksi
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="/mobil" class="nav-link text-white">
+                <a href="{{ route('kasir.mobil') }}" class="nav-link text-white">
                     Mobil
                 </a>
             </li>
  
             <li class="nav-item">
-                <a href="/laporan" class="nav-link text-white">
+                <a href="{{ route('laporan.index') }}" class="nav-link text-white">
                     Laporan
                 </a>
             </li>
