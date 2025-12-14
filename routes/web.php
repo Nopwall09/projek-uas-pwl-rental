@@ -80,11 +80,12 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
-    // DASHBOARD
-    Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
-        ->name('kasir.dashboard');
 
-    // FORM CREATE (ONLINE & OFFLINE)
+    Route::get('/kasir/dashboard', function () {
+        return view('kasir.dashboard');
+    })->name('kasir.dashboard');
+
+    //Buat CREATE
     Route::get('/kasir/create', [RentalItemController::class, 'create'])
         ->name('kasir.create');
 
@@ -96,15 +97,13 @@ Route::middleware(['kasir'])->group(function () {
     Route::get('/kasir', [RentalItemController::class, 'index'])
         ->name('kasir.index');
 
-    // FORM EDIT
-    Route::get('/kasir/{id}/edit', [RentalItemController::class, 'edit'])
-        ->name('kasir.edit');
-
-    // UPDATE DATA
-    Route::put('/kasir/{id}', [RentalItemController::class, 'update'])
+    //Buat UPDATE
+    Route::get('/kasir/update', [RentalItemController::class, 'update'])
         ->name('kasir.update');
 
-    // DELETE (ONLINE & OFFLINE)
+    //Buat DELETE
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])
-        ->name('kasir.destroy');
+    ->name('kasir.destroy');
+
+
 });
