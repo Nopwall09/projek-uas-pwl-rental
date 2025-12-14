@@ -43,7 +43,7 @@
         <h2 style="margin-bottom:30px;">Pilihan Unit Tersedia</h2>
 
         <div class="grid-mobil">
-
+        
         @foreach ($mobils as $mobil)
             <div class="card">
                 <img src="{{ asset('storage/'.$mobil->mobil_image) }}"
