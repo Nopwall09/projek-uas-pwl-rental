@@ -27,7 +27,7 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
+                // DateTimePicker::make('email_verified_at'),
             ]);
     }
 }

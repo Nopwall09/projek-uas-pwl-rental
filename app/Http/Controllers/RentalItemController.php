@@ -126,7 +126,6 @@ class RentalItemController extends Controller
             ->with('success', 'Sewa berhasil diperpanjang');
     }
 
-
     public function pesananSaya()
     {
         $rentals = RentalItem::with([

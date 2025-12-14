@@ -47,7 +47,7 @@ class MobilController extends Controller
 
         if ($request->hasFile('mobil_image')) {
             $image = $request->file('mobil_image');
-            $filename = time().'_'.$image->getClientOriginalName();
+            $filename = time() . '_' . $image->getClientOriginalName();
             $validated['mobil_image'] = $image->storeAs('mobil', $filename, 'public');
         }
 
@@ -62,7 +62,7 @@ class MobilController extends Controller
 
         return response()->json([
             'message' => 'Mobil berhasil ditambahkan',
-            'data' => $mobil->load(['merk','carclass','tipe','fasilitas'])
+            'data' => $mobil->load(['merk', 'carclass', 'tipe', 'fasilitas'])
         ], 201);
     }
 
@@ -105,7 +105,7 @@ class MobilController extends Controller
             }
 
             $image = $request->file('mobil_image');
-            $filename = time().'_'.$image->getClientOriginalName();
+            $filename = time() . '_' . $image->getClientOriginalName();
             $validated['mobil_image'] = $image->storeAs('mobil', $filename, 'public');
         }
 
@@ -118,34 +118,35 @@ class MobilController extends Controller
 
         return response()->json([
             'message' => 'Mobil berhasil diupdate',
-            'data' => $mobil->load(['merk','carclass','tipe','fasilitas','feedback'])
+            'data' => $mobil->load(['merk', 'carclass', 'tipe', 'fasilitas', 'feedback'])
         ]);
     }
 
     public function home()
     {
         $mobils = Mobil::with(['merk', 'status', 'class', 'tipe'])
-            ->where('status_id', 1) 
+            ->where('mobil_status', 'Tersedia')
             ->get();
-    
+
         return view('home', compact('mobils'));
     }
-    
+
     public function katalog()
     {
-        $cityCars = Mobil::with(['merk','tipe'])
+        $cityCars = Mobil::with(['merk', 'carclass', 'tipe'])
             ->where('class_id', 1)
-            ->where('status_id', 1)
+            ->where('mobil_status', 'Tersedia')
             ->get();
 
-        $familyCars = Mobil::with(['merk','tipe'])
-            ->where('class_id', 2)
-            ->where('status_id', 1)
+
+        $familyCars = Mobil::with(['merk', 'carclass', 'tipe'])
+            ->where('class_id', 1)
+            ->where('mobil_status', 'Tersedia')
             ->get();
 
-        $luxuryCars = Mobil::with(['merk','tipe'])
-            ->where('class_id', 3)
-            ->where('status_id', 1)
+        $luxuryCars = Mobil::with(['merk', 'carclass', 'tipe'])
+            ->where('class_id', 1)
+            ->where('mobil_status', 'Tersedia')
             ->get();
 
         return view('katalog.index', compact(
