@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Mobil;
@@ -9,7 +10,9 @@ class MobilController extends Controller
 {
     public function index()
     {
-        $mobils = Mobil::with(['merk', 'status', 'class', 'tipe', 'fasilitas'])->paginate(10);
+        $mobils = Mobil::with(['merk', 'class', 'tipe', 'fasilitas'])
+            ->paginate(10);
+
         return response()->json($mobils);
     }
 
@@ -17,9 +20,9 @@ class MobilController extends Controller
     {
         $validated = $request->validate([
             'merk_id' => 'required|exists:merk,merk_id',
-            'status_id' => 'required|exists:status,status_id',
             'class_id' => 'required|exists:class,class_id',
             'tipe_id' => 'required|exists:tipe,tipe_id',
+            'status' => 'required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'required|in:Manual,Matic',
             'mobil_warna' => 'required|string|max:50',
@@ -30,12 +33,11 @@ class MobilController extends Controller
             'fasilitas.*' => 'exists:fasilitas,fasilitas_id',
         ]);
 
-        // simpan image
         if ($request->hasFile('mobil_image')) {
             $image = $request->file('mobil_image');
             $filename = time() . '_' . $image->getClientOriginalName();
-            $path = $image->storeAs('mobil', $filename, 'public');
-            $validated['mobil_image'] = $path;
+            $validated['mobil_image'] =
+                $image->storeAs('mobil', $filename, 'public');
         }
 
         $fasilitas = $validated['fasilitas'] ?? [];
@@ -55,11 +57,11 @@ class MobilController extends Controller
 
     public function show($id)
     {
-        $mobil = Mobil::with(['merk', 'status', 'class', 'tipe', 'fasilitas'])->findOrFail($id);
+        $mobil = Mobil::with(['merk', 'class', 'tipe', 'fasilitas'])
+            ->findOrFail($id);
+
         return response()->json($mobil);
     }
-
-    
 
     public function update(Request $request, $id)
     {
@@ -67,9 +69,9 @@ class MobilController extends Controller
 
         $validated = $request->validate([
             'merk_id' => 'sometimes|required|exists:merk,merk_id',
-            'status_id' => 'sometimes|required|exists:status,status_id',
             'class_id' => 'sometimes|required|exists:class,class_id',
             'tipe_id' => 'sometimes|required|exists:tipe,tipe_id',
+            'status' => 'sometimes|required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'sometimes|required|in:Manual,Matic',
             'mobil_warna' => 'sometimes|required|string|max:50',
@@ -81,15 +83,14 @@ class MobilController extends Controller
         ]);
 
         if ($request->hasFile('mobil_image')) {
-            // hapus image lama
             if ($mobil->mobil_image && Storage::disk('public')->exists($mobil->mobil_image)) {
                 Storage::disk('public')->delete($mobil->mobil_image);
             }
 
             $image = $request->file('mobil_image');
             $filename = time() . '_' . $image->getClientOriginalName();
-            $path = $image->storeAs('mobil', $filename, 'public');
-            $validated['mobil_image'] = $path;
+            $validated['mobil_image'] =
+                $image->storeAs('mobil', $filename, 'public');
         }
 
         if (isset($validated['fasilitas'])) {
@@ -105,12 +106,14 @@ class MobilController extends Controller
         ]);
     }
 
-
     public function destroy($id)
     {
-        $mobil = Mobil::findOrFail($id);
-        $mobil->delete();
-
+        Mobil::findOrFail($id)->delete();
         return response()->json(['message' => 'Mobil berhasil dihapus']);
+    }
+
+    public function available()
+    {
+        return Mobil::where('status', 'Tersedia')->get();
     }
 }

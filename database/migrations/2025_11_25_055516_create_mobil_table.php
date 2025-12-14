@@ -16,7 +16,6 @@ return new class extends Migration
 
             // columns foreign keys
             $table->unsignedBigInteger('merk_id');
-            $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('tipe_id');
             
@@ -24,13 +23,14 @@ return new class extends Migration
             $table->string('mobil_image')->nullable();
             $table->enum('Transmisi', ['Manual', 'Matic']);
             $table->string('mobil_warna', 50);
+            $table->enum('status',['Tersedia','Disewa']);
             $table->string('mobil_plat', 30);
             $table->string('mobil_tahun', 4);
             $table->decimal('harga_rental', 10, 2);
 
             // relation
             $table->foreign('merk_id')->references('merk_id')->on('merk')->onDelete('cascade');
-            $table->foreign('status_id')->references('status_id')->on('status')->onDelete('cascade');
+            
             $table->foreign('class_id')->references('class_id')->on('class')->onDelete('cascade');
             $table->foreign('tipe_id')->references('tipe_id')->on('tipe')->onDelete('cascade');
         });

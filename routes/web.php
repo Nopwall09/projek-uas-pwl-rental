@@ -91,14 +91,31 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
-    Route::get('/kasir/dashboard', function () {
-        return view('kasir.dashboard');
-    })->name('kasir.dashboard');
+    // DASHBOARD
+    Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
+        ->name('kasir.dashboard');
 
-    Route::get('/kasir/create', [RentalItemController::class, 'store'])->name('kasir.create');
-    Route::post('/kasir', [RentalItemController::class, 'store'])->name('kasir.store');
-    Route::get('/kasir', [RentalItemController::class, 'index'])->name('kasir.index');
-    Route::get('transaksi', function () {
-        return view('kasir.create');
-    })->name('kasir.transaksi');
+    // FORM CREATE (ONLINE & OFFLINE)
+    Route::get('/kasir/create', [RentalItemController::class, 'create'])
+        ->name('kasir.create');
+
+    // SIMPAN TRANSAKSI
+    Route::post('/kasir', [RentalItemController::class, 'store'])
+        ->name('kasir.store');
+
+    // LIST TRANSAKSI
+    Route::get('/kasir', [RentalItemController::class, 'index'])
+        ->name('kasir.index');
+
+    // FORM EDIT
+    Route::get('/kasir/{id}/edit', [RentalItemController::class, 'edit'])
+        ->name('kasir.edit');
+
+    // UPDATE DATA
+    Route::put('/kasir/{id}', [RentalItemController::class, 'update'])
+        ->name('kasir.update');
+
+    // DELETE (ONLINE & OFFLINE)
+    Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])
+        ->name('kasir.destroy');
 });

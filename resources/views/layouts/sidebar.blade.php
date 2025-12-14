@@ -10,26 +10,19 @@
                     Dashboard
                 </a>
             </li>
+
             <li class="nav-item">
                 <a href="/transaksi" class="nav-link text-white">
                     Transaksi
                 </a>
             </li>
+
             <li class="nav-item">
                 <a href="/mobil" class="nav-link text-white">
                     Mobil
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="/pelanggan" class="nav-link text-white">
-                    Pelanggan
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/pengembalian" class="nav-link text-white">
-                    Pengembalian
-                </a>
-            </li>
+ 
             <li class="nav-item">
                 <a href="/laporan" class="nav-link text-white">
                     Laporan

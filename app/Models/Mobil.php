@@ -15,12 +15,12 @@ class Mobil extends Model
 
     protected $fillable = [
         'merk_id',
-        'status_id',
         'class_id',
         'tipe_id',
         'mobil_image',
         'Transmisi',
         'mobil_warna',
+        'status',
         'mobil_plat',
         'mobil_tahun',
         'harga_rental',
@@ -35,10 +35,6 @@ class Mobil extends Model
         return $this->belongsTo(Merk::class, 'merk_id', 'merk_id');
     }
 
-    public function status()
-    {
-        return $this->belongsTo(Status::class, 'status_id', 'status_id');
-    }
 
     public function carclass()
     {
