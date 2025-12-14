@@ -12,11 +12,8 @@
         <div class="about-container">
             <div class="about-text">
                 <p>About Us</p>
-                <h2>Rental Mobil</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Praesent nibh elit, tristique sit amet egestas quis, lobortis 
-                    a enim. Nullam lacus tortor, fermentum a posuere non, congue 
-                    a ex. Faser fringilla libero sed fermentum placerat.
+                <h2>Naivara Trans Group</h2>
+                <p>adalah penyedia jasa sewa mobil profesional di Tulungagung yang melayani berbagai kebutuhan perjalanan mulai dari wisata, acara keluarga, perjalanan dinas, hingga antar jemput dengan pilihan armada lengkap, terawat, serta opsi dengan atau tanpa driver berpengalaman. Kami berkomitmen memberikan pelayanan terbaik dengan mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan agar setiap perjalanan Anda menjadi pengalaman yang aman, tepat waktu, dan berkesan.
                 </p>
             </div>
 
@@ -33,11 +30,8 @@
 
             <div class="about-text">
                 <p>About Us</p>
-                <h2>Rental Mobil</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Praesent nibh elit, tristique sit amet egestas quis, lobortis 
-                    a enim. Nullam lacus tortor, fermentum a posuere non, congue 
-                    a ex. Vestibulum ut felis.
+                <h2>Naivara Trans Group</h2>
+                <p>merupakan layanan sewa mobil terpercaya di Tulungagung dengan armada lengkap, terawat, serta pilihan layanan dengan atau tanpa driver profesional untuk berbagai kebutuhan perjalanan. Kami mengutamakan kenyamanan, keamanan, dan pelayanan terbaik agar setiap perjalanan pelanggan berjalan lancar dan memuaskan.
                 </p>
             </div>
         </div>
@@ -134,10 +128,7 @@
             <div class="testi-img"></div>
             <div class="testi-text">
                 <h2>Testimoni Klien</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Praesent nibh elit, tristique sit amet egestas quis, lobortis 
-                    a enim. Nullam lacus tortor, fermentum a posuere non, congue 
-                    a ex.
+                <p>Pelayanan Navara Trans Group sangat memuaskan, mobil bersih, nyaman, dan kondisi prima sehingga perjalanan terasa aman dan menyenangkan. Proses pemesanan mudah, respon cepat, serta driver yang ramah dan profesional membuat kami tidak ragu untuk menggunakan layanan ini kembali.
                 </p>
             </div>
         </div>

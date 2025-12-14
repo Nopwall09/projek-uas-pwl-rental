@@ -13,7 +13,7 @@
         </div>
 
         <ul class="nav-menu" id="menu">
-            <li><a href="{{ url('/home') }}">HOME</a></li>
+            <li><a href="{{ route('home') }}">HOME</a></li>
             <li><a href="{{ url('/katalog') }}">KATALOG MOBIL</a></li>
             <li><a href="https://wa.me/6282333318107">KONTAK</a></li>
 

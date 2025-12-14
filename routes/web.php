@@ -84,6 +84,10 @@ Route::middleware(['user'])->group(function () {
     Route::get('/Konfirmasi', function () {
         return view('Pemesanan.konfirPesan');
     })->name('Konfirmasi');
+    
+    Route::get('/pesanan-saya', function () {
+        return view('profil.pesanan-saya');
+    })->name('pesanan-saya');
 });
 
 /*
