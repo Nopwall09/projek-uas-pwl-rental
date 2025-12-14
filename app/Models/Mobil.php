@@ -17,6 +17,7 @@ class Mobil extends Model
         'merk_id',
         'class_id',
         'tipe_id',
+        'feedback_id',
         'mobil_image',
         'Transmisi',
         'mobil_warna',
@@ -59,5 +60,9 @@ class Mobil extends Model
     public function seat()
     {
         return $this->belongsTo(Seat::class, 'seat_id', 'seat_id');
+    }
+    public function feedback()
+    {
+        return $this->belongsTo(Feedback::class, 'feedback_id', 'feedback_id');
     }
 }

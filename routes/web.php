@@ -61,9 +61,21 @@ Route::middleware(['user'])->group(function () {
         return view('home');
     })->name('home');
 
-    Route::get('profile', [UserController::class, 'show'])->name('open.profile');
-    Route::get('edit', [UserController::class, 'update'])->name('update.profile');
-    Route::get('edit', [AuthController::class, 'logout'])->name('logout');
+    // PROFILE USER
+    Route::get('/profile', [UserController::class, 'profile'])
+        ->name('profile');
+
+    Route::get('/profile/edit', [UserController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::put('/profile', [UserController::class, 'updateProfile'])
+        ->name('profile.update');
+
+    // LOGOUT
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('logout');
+
+
     Route::get('/katalog', function () {
         return view('Katalog.index');
     })->name('katalog');
@@ -73,6 +85,10 @@ Route::middleware(['user'])->group(function () {
     Route::get('/Konfirmasi', function () {
         return view('Pemesanan.konfirPesan');
     })->name('Konfirmasi');
+    
+    Route::get('/pesanan-saya', function () {
+        return view('profil.pesanan-saya');
+    })->name('pesanan-saya');
 });
 
 /*

@@ -10,8 +10,13 @@ class MobilController extends Controller
 {
     public function index()
     {
-        $mobils = Mobil::with(['merk', 'class', 'tipe', 'fasilitas'])
-            ->paginate(10);
+        $mobils = Mobil::with([
+            'merk',
+            'carclass',
+            'tipe',
+            'fasilitas',
+            'feedback'
+        ])->paginate(10);
 
         return response()->json($mobils);
     }
@@ -28,6 +33,7 @@ class MobilController extends Controller
             'merk_id' => 'required|exists:merk,merk_id',
             'class_id' => 'required|exists:class,class_id',
             'tipe_id' => 'required|exists:tipe,tipe_id',
+            'feedback_id' => 'nullable|exists:feedback,feedback_id',
             'mobil_status' => 'required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'required|in:Manual,Matic',
@@ -41,9 +47,8 @@ class MobilController extends Controller
 
         if ($request->hasFile('mobil_image')) {
             $image = $request->file('mobil_image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            $validated['mobil_image'] =
-                $image->storeAs('mobil', $filename, 'public');
+            $filename = time().'_'.$image->getClientOriginalName();
+            $validated['mobil_image'] = $image->storeAs('mobil', $filename, 'public');
         }
 
         $fasilitas = $validated['fasilitas'] ?? [];
@@ -57,14 +62,19 @@ class MobilController extends Controller
 
         return response()->json([
             'message' => 'Mobil berhasil ditambahkan',
-            'data' => $mobil
+            'data' => $mobil->load(['merk','carclass','tipe','fasilitas'])
         ], 201);
     }
 
     public function show($id)
     {
-        $mobil = Mobil::with(['merk', 'class', 'tipe', 'fasilitas'])
-            ->findOrFail($id);
+        $mobil = Mobil::with([
+            'merk',
+            'carclass',
+            'tipe',
+            'fasilitas',
+            'feedback'
+        ])->findOrFail($id);
 
         return response()->json($mobil);
     }
@@ -77,6 +87,7 @@ class MobilController extends Controller
             'merk_id' => 'sometimes|required|exists:merk,merk_id',
             'class_id' => 'sometimes|required|exists:class,class_id',
             'tipe_id' => 'sometimes|required|exists:tipe,tipe_id',
+            'feedback_id' => 'sometimes|nullable|exists:feedback,feedback_id',
             'mobil_status' => 'sometimes|required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'sometimes|required|in:Manual,Matic',
@@ -94,9 +105,8 @@ class MobilController extends Controller
             }
 
             $image = $request->file('mobil_image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            $validated['mobil_image'] =
-                $image->storeAs('mobil', $filename, 'public');
+            $filename = time().'_'.$image->getClientOriginalName();
+            $validated['mobil_image'] = $image->storeAs('mobil', $filename, 'public');
         }
 
         if (isset($validated['fasilitas'])) {
@@ -108,18 +118,27 @@ class MobilController extends Controller
 
         return response()->json([
             'message' => 'Mobil berhasil diupdate',
-            'data' => $mobil
+            'data' => $mobil->load(['merk','carclass','tipe','fasilitas','feedback'])
         ]);
     }
 
     public function destroy($id)
     {
-        Mobil::findOrFail($id)->delete();
+        $mobil = Mobil::findOrFail($id);
+
+        if ($mobil->mobil_image && Storage::disk('public')->exists($mobil->mobil_image)) {
+            Storage::disk('public')->delete($mobil->mobil_image);
+        }
+
+        $mobil->delete();
+
         return response()->json(['message' => 'Mobil berhasil dihapus']);
     }
 
     public function available()
     {
-        return Mobil::where('mobil_status', 'Tersedia')->get();
+        return response()->json(
+            Mobil::where('mobil_status', 'Tersedia')->get()
+        );
     }
 }
