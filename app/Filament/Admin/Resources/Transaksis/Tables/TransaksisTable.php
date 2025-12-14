@@ -14,27 +14,47 @@ class TransaksisTable
     {
         return $table
             ->columns([
-                TextColumn::make('method_id')
-                    ->numeric()
+                // 1. ID Transaksi
+                TextColumn::make('transaksi_id')
+                    ->label('ID')
                     ->sortable(),
-                TextColumn::make('rental_id')
-                    ->numeric()
+
+                // 2. Info Rental & Penyewa (Nested Relation)
+                // Menampilkan ID Rental, dan kita bisa cari tahu siapa penyewanya lewat relasi rentalItem.user.name
+                TextColumn::make('rentalItem.user.name') 
+                    ->label('Penyewa')
+                    ->description(fn ($record) => 'Rental ID: ' . $record->rental_id) // Info tambahan kecil di bawah nama
+                    ->searchable()
                     ->sortable(),
+
+                // 3. Metode Pembayaran (Teks)
+                TextColumn::make('methodPembayaran.method') 
+                    ->label('Metode')
+                    ->badge() // Biar terlihat seperti label kecil
+                    ->color('info'),
+
+                // 4. Tanggal
                 TextColumn::make('tanggal_transaksi')
-                    ->date()
+                    ->label('Tanggal')
+                    ->date('d M Y')
                     ->sortable(),
-                TextColumn::make('status'),
+
+                // 5. Status Warna-Warni
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'berhasil' => 'success', // Hijau
+                        'pending' => 'warning',  // Kuning
+                        'gagal' => 'danger',     // Merah
+                        default => 'gray',
+                    }),
+
+                // 6. Total Bayar (Rupiah)
                 TextColumn::make('total_bayar')
-                    ->numeric()
+                    ->label('Total')
+                    ->money('IDR')
+                    ->weight('bold')
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

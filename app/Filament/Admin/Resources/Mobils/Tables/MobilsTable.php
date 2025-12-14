@@ -2,12 +2,13 @@
 
 namespace App\Filament\Admin\Resources\Mobils\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Tables\Columns\ImageColumn;
+
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
 
 class MobilsTable
 {
@@ -15,28 +16,39 @@ class MobilsTable
     {
         return $table
             ->columns([
-                TextColumn::make('merk_id')
-                    ->numeric()
+                // Gambar Kecil Kotak
+                ImageColumn::make('mobil_image')
+                    ->label('Foto')
+                    ->square(),
+                    
+
+                // Nama Merk (Tebal)
+                TextColumn::make('merk.merk_nama')
+                    ->label('Merk')
+                    ->weight('bold')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('status_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('class_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('tipe_id')
-                    ->numeric()
-                    ->sortable(),
-                ImageColumn::make('mobil_image'),
-                TextColumn::make('Transmisi'),
-                TextColumn::make('mobil_warna')
-                    ->searchable(),
+
+                // Plat Nomor
                 TextColumn::make('mobil_plat')
+                    ->label('Plat No')
                     ->searchable(),
-                TextColumn::make('mobil_tahun')
-                    ->searchable(),
+
+                // // Status dengan Warna-Warni (Fitur Keren)
+                // TextColumn::make('status.status_nama')
+                //     ->label('Status'),
+
+                // Tipe & Kelas
+                TextColumn::make('tipe.tipe_nama')
+                    ->label('Tipe'),
+
+                TextColumn::make('carclass.class_nama')
+                    ->label('Kelas'),
+
+                // Harga Format Rupiah
                 TextColumn::make('harga_rental')
-                    ->numeric()
+                    ->label('Harga')
+                    ->money('IDR')
                     ->sortable(),
             ])
             ->filters([

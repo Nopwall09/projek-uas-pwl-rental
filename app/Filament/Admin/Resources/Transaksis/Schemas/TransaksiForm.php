@@ -13,12 +13,21 @@ class TransaksiForm
     {
         return $schema
             ->components([
-                TextInput::make('method_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('rental_id')
-                    ->required()
-                    ->numeric(),
+            Select::make('method_id')
+    
+                ->relationship('methodPembayaran', 'method') 
+                ->label('Metode Pembayaran')
+                        
+                ->preload()
+                ->required(),
+
+
+                Select::make('rental_id')
+                   ->relationship('rentalItem', 'rental_id')
+                   ->label('ID Rental')
+               
+                   ->preload()
+                   ->required(),
                 DatePicker::make('tanggal_transaksi')
                     ->required(),
                 Select::make('status')

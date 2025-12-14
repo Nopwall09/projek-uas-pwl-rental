@@ -36,10 +36,10 @@ class User extends Authenticatable
         return $this->hasMany(RentalItem::class, 'user_id', 'user_id');
     }
 
-    public function logAktivitas()
-    {
-        return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
-    }
+    // public function logAktivitas()
+    // {
+    //     // return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
+    // }
 
     public function historyRentals()
     {
