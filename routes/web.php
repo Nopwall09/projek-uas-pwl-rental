@@ -4,7 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
+<<<<<<< HEAD
 use App\Http\Controllers\FeedbackController;
+=======
+use App\Http\Controllers\MobilController;
+>>>>>>> 41dd29cb4aeeab5cb82486057370624bea27b22f
 
 /* ini cuman buat tes tar ganti aja*/
 
@@ -130,5 +134,12 @@ Route::middleware(['kasir'])->group(function () {
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])
     ->name('kasir.destroy');
 
+    Route::get('/laporan', [RentalItemController::class, 'laporan'])
+    ->name('laporan.index');
 
+    Route::get('/mobil', [MobilController::class, 'tampilMobil'])
+    ->name('kasir.mobil');
+
+    Route::get('/transaksi', [RentalItemController::class, 'tampilTransaksi'])
+    ->name('transaksi.index');
 });
