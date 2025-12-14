@@ -92,7 +92,6 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
-<<<<<<< HEAD
 
     public function pesananSaya()
     {
@@ -110,23 +109,5 @@ class RentalItemController extends Controller
     }
     
 
-=======
-    public function laporan()
-    {
-        $laporan = RentalItem::with(['user', 'mobil', 'driver'])->orderBy('tgl', 'desc')->paginate(10);
-        return view('laporan.index', compact('laporan'));
-    }
-
-    public function tampilTransaksi()
-    {
-        $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
-            ->orderBy('tgl', 'desc')
-            ->paginate(10);
-        
-            $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
-
-        return view('transaksi.index', compact('transaksis', 'mobils'));
-    }
->>>>>>> 41dd29cb4aeeab5cb82486057370624bea27b22f
 
 }

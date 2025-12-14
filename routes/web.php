@@ -4,11 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
-<<<<<<< HEAD
 use App\Http\Controllers\FeedbackController;
-=======
 use App\Http\Controllers\MobilController;
->>>>>>> 41dd29cb4aeeab5cb82486057370624bea27b22f
 
 /* ini cuman buat tes tar ganti aja*/
 
