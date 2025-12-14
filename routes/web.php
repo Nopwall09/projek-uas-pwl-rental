@@ -4,11 +4,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
+<<<<<<< HEAD
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\MobilController;
 
 /* ini cuman buat tes tar ganti aja*/
 
+=======
+use App\Http\Controllers\MobilController;
+use App\Http\Controllers\ChatController;
+
+/* ini cuman buat tes tar ganti aja*/
+// Route::get('/home', function () {
+//     return view('home');
+// });
+>>>>>>> 0cc1a39c6602ff06c3daa47daf21dbb12d155dc5
 
 // Route::get('katalog', function () {
 //     return view('katalog/index');
@@ -61,6 +71,7 @@ Route::middleware(['user'])->group(function () {
     Route::get('/', function () {
         return view('home');
     })->name('home');
+<<<<<<< HEAD
 
     // PROFILE USER
     Route::get('/profile', [UserController::class, 'profile'])
@@ -76,10 +87,26 @@ Route::middleware(['user'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');
 
+=======
+    Route::get('/home', [MobilController::class, 'home'])->name('home');
+    Route::get('profile', [UserController::class, 'show'])->name('open.profile');
+    Route::get('edit', [UserController::class, 'update'])->name('update.profile');
+    Route::get('edit', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/send-message', [ChatController::class, 'sendMessage'])->middleware('auth');
+});
+>>>>>>> 0cc1a39c6602ff06c3daa47daf21dbb12d155dc5
 
     Route::get('/katalog', function () {
         return view('Katalog.index');
     })->name('katalog');
+<<<<<<< HEAD
+=======
+    Route::get('/katalog', [MobilController::class, 'katalog'])->name('katalog');
+
+});
+
+Route::middleware(['user'])->group(function () {
+>>>>>>> 0cc1a39c6602ff06c3daa47daf21dbb12d155dc5
     Route::get('/pemesanan', function () {
         return view('Pemesanan.index');
     })->name('pemesanan');
@@ -111,6 +138,7 @@ Route::middleware(['kasir'])->group(function () {
         ->name('kasir.dashboard')
         ->middleware('kasir');
 
+<<<<<<< HEAD
     //Buat CREATE
     Route::get('/kasir/create', [RentalItemController::class, 'create'])
         ->name('kasir.create');
@@ -140,3 +168,30 @@ Route::middleware(['kasir'])->group(function () {
     Route::get('/transaksi', [RentalItemController::class, 'tampilTransaksi'])
     ->name('transaksi.index');
 });
+=======
+    Route::get('/kasir/create', [RentalItemController::class, 'store'])->name('kasir.create');
+    Route::post('/kasir', [RentalItemController::class, 'store'])->name('kasir.store');
+    Route::get('/kasir', [RentalItemController::class, 'index'])->name('kasir.index');
+    Route::get('transaksi', function () {
+        return view('kasir.create');
+    })->name('kasir.transaksi');
+});
+
+// Route::middleware(['admin'])->group(function () {
+//     Route::get('/admin/chat', [ChatController::class, 'adminChat']);
+//     Route::post('/admin/send-message', [ChatController::class, 'adminSend']);
+// });
+
+// Route::middleware(['user'])->get('/chat/messages', [ChatController::class, 'getMessages']);
+
+Route::middleware(['admin'])->group(function () {
+    Route::get('/admin/chat', [ChatController::class, 'adminChatList']);
+    Route::get('/admin/chat/{user_id}', [ChatController::class, 'adminChatUser']);
+    Route::post('/admin/chat/{user_id}/send', [ChatController::class, 'adminSend']);
+});
+
+Route::middleware(['user'])->group(function () {
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
+    Route::get('/chat/messages', [ChatController::class, 'getMessages']);
+});
+>>>>>>> 0cc1a39c6602ff06c3daa47daf21dbb12d155dc5

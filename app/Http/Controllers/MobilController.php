@@ -122,6 +122,43 @@ class MobilController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
+=======
+    public function home()
+    {
+        $mobils = Mobil::with(['merk', 'status', 'class', 'tipe'])
+            ->where('status_id', 1) 
+            ->get();
+    
+        return view('home', compact('mobils'));
+    }
+    
+    public function katalog()
+    {
+        $cityCars = Mobil::with(['merk','tipe'])
+            ->where('class_id', 1)
+            ->where('status_id', 1)
+            ->get();
+
+        $familyCars = Mobil::with(['merk','tipe'])
+            ->where('class_id', 2)
+            ->where('status_id', 1)
+            ->get();
+
+        $luxuryCars = Mobil::with(['merk','tipe'])
+            ->where('class_id', 3)
+            ->where('status_id', 1)
+            ->get();
+
+        return view('katalog.index', compact(
+            'cityCars',
+            'familyCars',
+            'luxuryCars'
+        ));
+    }
+
+
+>>>>>>> 0cc1a39c6602ff06c3daa47daf21dbb12d155dc5
     public function destroy($id)
     {
         $mobil = Mobil::findOrFail($id);
