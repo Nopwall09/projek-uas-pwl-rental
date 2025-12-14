@@ -61,4 +61,6 @@ class RentalItem extends Model
     {
         return $this->hasMany(HistoryRental::class, 'rental_id', 'rental_id');
     }
+
+
 }

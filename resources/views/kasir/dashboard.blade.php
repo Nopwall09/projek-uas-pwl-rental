@@ -9,10 +9,10 @@
         <h1 class="mb-0">Dashboard Kasir</h1>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('kasir.create') }}" class="btn btn-primary">
+            <a href="{{ route('kasir.store') }}" class="btn btn-primary">
                 + Transaksi Baru
             </a>
-            <a href="{{ route('kasir.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('kasir.dashboard') }}" class="btn btn-outline-secondary">
                 Data Transaksi
             </a>
         </div>
@@ -67,7 +67,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title mb-0">Sewa Aktif</h5>
-                <a href="{{ route('kasir.index') }}" class="btn btn-sm btn-outline-primary">
+                <a href="{{ route('kasir.dashboard') }}" class="btn btn-sm btn-outline-primary">
                     Lihat Semua
                 </a>
             </div>
