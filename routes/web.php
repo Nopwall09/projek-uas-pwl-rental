@@ -4,11 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MobilController;
+use App\Http\Controllers\ChatController;
 
 /* ini cuman buat tes tar ganti aja*/
-Route::get('/home', function () {
-    return view('home');
-});
+// Route::get('/home', function () {
+//     return view('home');
+// });
 
 // Route::get('katalog', function () {
 //     return view('katalog/index');
@@ -61,16 +63,19 @@ Route::middleware(['user'])->group(function () {
     Route::get('/home', function () {
         return view('home');
     })->name('home');
-
+    Route::get('/home', [MobilController::class, 'home'])->name('home');
     Route::get('profile', [UserController::class, 'show'])->name('open.profile');
     Route::get('edit', [UserController::class, 'update'])->name('update.profile');
     Route::get('edit', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/send-message', [ChatController::class, 'sendMessage'])->middleware('auth');
 });
 
 Route::middleware(['user'])->group(function () {
     Route::get('/katalog', function () {
         return view('katalog/index');
     })->name('katalog');
+    Route::get('/katalog', [MobilController::class, 'katalog'])->name('katalog');
+
 });
 
 Route::middleware(['user'])->group(function () {
@@ -101,4 +106,22 @@ Route::middleware(['kasir'])->group(function () {
     Route::get('transaksi', function () {
         return view('kasir.create');
     })->name('kasir.transaksi');
+});
+
+// Route::middleware(['admin'])->group(function () {
+//     Route::get('/admin/chat', [ChatController::class, 'adminChat']);
+//     Route::post('/admin/send-message', [ChatController::class, 'adminSend']);
+// });
+
+// Route::middleware(['user'])->get('/chat/messages', [ChatController::class, 'getMessages']);
+
+Route::middleware(['admin'])->group(function () {
+    Route::get('/admin/chat', [ChatController::class, 'adminChatList']);
+    Route::get('/admin/chat/{user_id}', [ChatController::class, 'adminChatUser']);
+    Route::post('/admin/chat/{user_id}/send', [ChatController::class, 'adminSend']);
+});
+
+Route::middleware(['user'])->group(function () {
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
+    Route::get('/chat/messages', [ChatController::class, 'getMessages']);
 });
