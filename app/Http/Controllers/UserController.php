@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -34,29 +35,44 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with('rules', 'rentalItems')->findOrFail($id);
+        $user = User::with('rentalItems')->findOrFail($id);
         return response()->json($user);
     }
 
-    public function update(Request $request, $id)
+    public function updateProfile(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
 
         $validated = $request->validate([
-            'nama' => 'sometimes|required|string|max:255',
-            'role' => 'sometimes|required|in:admin,user,kasir',
-            'username' => ['sometimes', 'required', 'string', 'max:255', Rule::unique('users')->ignore($user->user_id, 'user_id')],
-            'password' => 'sometimes|nullable|string|min:8',
-            'email' => ['sometimes', 'required', 'email', Rule::unique('users')->ignore($user->user_id, 'user_id')],
+            'nama' => 'required|string|max:255',
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'username')->ignore($user->user_id, 'user_id'),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->user_id, 'user_id'),
+            ],
+
+            // password opsional
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        if (isset($validated['password'])) {
+        // Jika password diisi → hash
+        if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
         }
 
         $user->update($validated);
 
-        return response()->json(['message' => 'User berhasil diupdate', 'data' => $user]);
+        return redirect()
+            ->route('profile')
+            ->with('success', 'Profil berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -65,5 +81,17 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'User berhasil dihapus']);
+    }
+    public function profile()
+    {
+        return view('profile.index', [
+            'user' => Auth::user()
+        ]);
+    }
+    public function edit()
+    {
+        return view('profile.edit', [
+            'user' => Auth::user()
+        ]);
     }
 }

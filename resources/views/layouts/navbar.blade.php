@@ -29,7 +29,10 @@
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li><a href="{{ route('open.profile') }}">Profil Saya</a></li>
+                        <li>
+                            <a href="{{ route('profile') }}">Profil Saya</a>
+                        </li>
+
                         <li><a href="{{ url('/pesanan-saya') }}">Pesanan Saya</a></li>
                         <li class="divider"></li>
                         <li>

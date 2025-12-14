@@ -27,36 +27,35 @@
         @csrf
         @method('PUT')
 
-        <div class="form-group">
+        <div>
             <label>Nama</label>
-            <input type="text" name="name" value="{{ old('name', $user->name) }}" required>
+            <input type="text" name="nama" value="{{ old('nama', auth()->user()->nama) }}">
         </div>
 
-        <div class="form-group">
+        <div>
             <label>Username</label>
-            <input type="text" name="username" value="{{ old('username', $user->username) }}" required>
+            <input type="text" name="username" value="{{ old('username', auth()->user()->username) }}">
         </div>
 
-        <div class="form-group">
+        <div>
             <label>Email</label>
-            <input type="email" name="email" value="{{ old('email', $user->email) }}" required>
+            <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}">
         </div>
 
-        <hr>
-
-        <div class="form-group">
+        <div>
             <label>Password Baru (opsional)</label>
             <input type="password" name="password">
         </div>
 
-        <div class="form-group">
+        <div>
             <label>Konfirmasi Password</label>
             <input type="password" name="password_confirmation">
         </div>
 
-        <button type="submit" class="btn-save">
-            Simpan Perubahan
-        </button>
+        <button type="submit">Simpan</button>
+    </form>
+
+
 
         <a href="{{ route('profile') }}" class="btn-cancel">
             Batal
