@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\RentalItem;
 use App\Models\Mobil;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RentalItemController extends Controller
 {
@@ -90,4 +92,22 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
+
+    public function pesananSaya()
+    {
+        $rentals = RentalItem::with([
+            'mobil.merk',
+            'mobil.carclass',
+            'mobil.tipe',
+            'feedback'
+        ])
+        ->where('user_id', Auth::id())
+        ->orderBy('tgl', 'desc')
+        ->get();
+
+        return view('profile.pesanan-saya', compact('rentals'));
+    }
+    
+
+
 }

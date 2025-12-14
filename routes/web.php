@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FeedbackController;
 
 /* ini cuman buat tes tar ganti aja*/
 
@@ -84,10 +85,19 @@ Route::middleware(['user'])->group(function () {
     Route::get('/Konfirmasi', function () {
         return view('Pemesanan.konfirPesan');
     })->name('Konfirmasi');
-    
-    Route::get('/pesanan-saya', function () {
-        return view('profil.pesanan-saya');
-    })->name('pesanan-saya');
+
+    Route::get('/pesanan-saya', [RentalItemController::class, 'pesananSaya'])
+    ->middleware('auth');
+
+    Route::prefix('feedback')->group(function () {
+        Route::post('/', [FeedbackController::class, 'store'])->name('feedback.store');
+        Route::get('/', [FeedbackController::class, 'index'])->name('feedback.index');
+        Route::get('/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+        Route::put('/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
+        Route::delete('/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+});
+
+
 });
 
 /*
