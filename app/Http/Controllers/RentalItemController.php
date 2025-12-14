@@ -5,11 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\RentalItem;
 use App\Models\Mobil;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RentalItemController extends Controller
 {
+    public function index()
+    {
+        $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
+            ->orderBy('tgl', 'desc')
+            ->paginate(10);
+        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+        return view('transaksi.index', compact('transaksis', 'mobils'));
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'mobil_id' => 'required|exists:mobil,mobil_id',
+            'lama_rental' => 'required|numeric|min:1',
+            'total_sewa' => 'required|numeric|min:0',
+            'pilihan' => 'required|string',
+            'tgl' => 'required|date',
+            'booking_source' => 'required|in:online,offline',
+            'jaminan' => 'required|string|max:50',
+        ]);
+
+        $rental = RentalItem::create($validated);
+
+        // update status mobil jadi disewa
+        $mobil = Mobil::find($validated['mobil_id']);
+        if ($mobil) {
+            $mobil->update(['mobil_status' => 'Disewa']);
+        }
+
+        return redirect()->route('kasir.tampilTransaksi')
+            ->with('success', 'Transaksi berhasil ditambahkan!');
+    }
+
     /* =====================================================
      | DASHBOARD KASIR
      ===================================================== */
@@ -90,6 +125,24 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
+
+    public function pesananSaya()
+    {
+        $rentals = RentalItem::with([
+            'mobil.merk',
+            'mobil.carclass',
+            'mobil.tipe',
+            'feedback'
+        ])
+        ->where('user_id', Auth::id())
+        ->orderBy('tgl', 'desc')
+        ->get();
+
+        return view('profile.pesanan-saya', compact('rentals'));
+    }
+    
+
+
     public function laporan()
     {
         $laporan = RentalItem::with(['user', 'mobil', 'driver'])->orderBy('tgl', 'desc')->paginate(10);
@@ -101,10 +154,9 @@ class RentalItemController extends Controller
         $transaksis = RentalItem::with(['user', 'mobil', 'driver'])
             ->orderBy('tgl', 'desc')
             ->paginate(10);
-        
-            $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+
+        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
 
         return view('transaksi.index', compact('transaksis', 'mobils'));
     }
-
 }

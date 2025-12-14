@@ -28,4 +28,9 @@ class Feedback extends Model
     {
         return $this->hasMany(Mobil::class, 'feedback_id', 'feedback_id');
     }
+    public function rental()
+    {
+        return $this->belongsTo(RentalItem::class, 'rental_id', 'rental_id');
+    }
+
 }

@@ -46,5 +46,18 @@ class UserSeeder extends Seeder
         ]
     );
 
+    DB::table('users')->updateOrInsert(
+        ['username' => 'user2'],
+        [
+            'name' => 'User Biasa2',
+            'role' => 'user',
+            'email' => 'user2@gmail.com',
+            'password' => Hash::make('user123'),
+            'updated_at' => now(),
+            'created_at' => now(),
+        ]
+    );
+
+
     }
 }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Http\Request;
-
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 class FeedbackController extends Controller
 {
     public function index()
@@ -16,20 +17,32 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'rental_id' => 'required|integer',
-            'rating' => 'required|string|max:50',
+            'rental_id' => [
+                'required',
+                'exists:rental_item,rental_id',
+                Rule::unique('feedback')->where(function ($q) {
+                    return $q->where('rental_id', request('rental_id'));
+                }),
+            ],
+            'rating' => 'required|numeric|min:1|max:5',
             'komentar' => 'required|string',
             'tanggal_feedback' => 'required|date',
         ]);
 
-        $feedback = Feedback::create($validated);
+        // 🔒 PASTIKAN RENTAL MILIK USER LOGIN
+        $rental = \App\Models\RentalItem::where('rental_id', $validated['rental_id'])
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
-        return response()->json([
-            'message' => 'Feedback berhasil dibuat',
-            'data' => $feedback
-        ], 201);
+        \App\Models\Feedback::create([
+            'rental_id' => $validated['rental_id'],
+            'rating' => $validated['rating'],
+            'komentar' => $validated['komentar'],
+            'tanggal_feedback' => $validated['tanggal_feedback'],
+        ]);
+
+        return back()->with('success', 'Feedback berhasil dikirim');
     }
-
     public function show($id)
     {
         $feedback = Feedback::with('mobil')->findOrFail($id);
