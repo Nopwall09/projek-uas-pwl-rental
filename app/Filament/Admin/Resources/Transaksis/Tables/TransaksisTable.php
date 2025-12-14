@@ -1,43 +1,40 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Mobils\Tables;
+namespace App\Filament\Admin\Resources\Transaksis\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class MobilsTable
+class TransaksisTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('merk_id')
+                TextColumn::make('method_id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('status_id')
+                TextColumn::make('rental_id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('class_id')
+                TextColumn::make('tanggal_transaksi')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('status'),
+                TextColumn::make('total_bayar')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('tipe_id')
-                    ->numeric()
-                    ->sortable(),
-                ImageColumn::make('mobil_image'),
-                TextColumn::make('Transmisi'),
-                TextColumn::make('mobil_warna')
-                    ->searchable(),
-                TextColumn::make('mobil_plat')
-                    ->searchable(),
-                TextColumn::make('mobil_tahun')
-                    ->searchable(),
-                TextColumn::make('harga_rental')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
