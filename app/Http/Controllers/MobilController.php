@@ -22,7 +22,7 @@ class MobilController extends Controller
             'merk_id' => 'required|exists:merk,merk_id',
             'class_id' => 'required|exists:class,class_id',
             'tipe_id' => 'required|exists:tipe,tipe_id',
-            'status' => 'required|in:Tersedia,Disewa',
+            'mobil_status' => 'required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'required|in:Manual,Matic',
             'mobil_warna' => 'required|string|max:50',
@@ -71,7 +71,7 @@ class MobilController extends Controller
             'merk_id' => 'sometimes|required|exists:merk,merk_id',
             'class_id' => 'sometimes|required|exists:class,class_id',
             'tipe_id' => 'sometimes|required|exists:tipe,tipe_id',
-            'status' => 'sometimes|required|in:Tersedia,Disewa',
+            'mobil_status' => 'sometimes|required|in:Tersedia,Disewa',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'sometimes|required|in:Manual,Matic',
             'mobil_warna' => 'sometimes|required|string|max:50',
@@ -114,6 +114,6 @@ class MobilController extends Controller
 
     public function available()
     {
-        return Mobil::where('status', 'Tersedia')->get();
+        return Mobil::where('mobil_status', 'Tersedia')->get();
     }
 }

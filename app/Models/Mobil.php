@@ -20,7 +20,7 @@ class Mobil extends Model
         'mobil_image',
         'Transmisi',
         'mobil_warna',
-        'status',
+        'mobil_status',
         'mobil_plat',
         'mobil_tahun',
         'harga_rental',

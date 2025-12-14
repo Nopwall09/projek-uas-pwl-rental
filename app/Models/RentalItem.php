@@ -11,6 +11,7 @@ class RentalItem extends Model
 
     protected $table = 'rental_item';
     protected $primaryKey = 'rental_id';
+    public $timestamps = false;
 
     protected $fillable = [
         'user_id',
@@ -28,6 +29,8 @@ class RentalItem extends Model
         'tgl' => 'date',
         'total_sewa' => 'decimal:2',
     ];
+
+    /* ================= RELATIONS ================= */
 
     public function user()
     {

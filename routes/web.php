@@ -6,9 +6,7 @@ use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
 
 /* ini cuman buat tes tar ganti aja*/
-Route::get('/home', function () {
-    return view('home');
-});
+
 
 // Route::get('katalog', function () {
 //     return view('katalog/index');
@@ -58,28 +56,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['user'])->group(function () {
-    Route::get('/home', function () {
+    Route::get('/', function () {
         return view('home');
     })->name('home');
 
     Route::get('profile', [UserController::class, 'show'])->name('open.profile');
     Route::get('edit', [UserController::class, 'update'])->name('update.profile');
     Route::get('edit', [AuthController::class, 'logout'])->name('logout');
-});
-
-Route::middleware(['user'])->group(function () {
     Route::get('/katalog', function () {
-        return view('katalog/index');
+        return view('Katalog.index');
     })->name('katalog');
-});
-
-Route::middleware(['user'])->group(function () {
     Route::get('/pemesanan', function () {
-        return view('pemesanan/index');
+        return view('Pemesanan.index');
     })->name('pemesanan');
-});
-
-Route::middleware(['user'])->group(function () {
     Route::get('/Konfirmasi', function () {
         return view('Pemesanan.konfirPesan');
     })->name('Konfirmasi');
