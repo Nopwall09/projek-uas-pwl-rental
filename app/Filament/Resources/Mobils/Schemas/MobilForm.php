@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\FileUpload;
 
 class MobilForm
 {
@@ -17,6 +18,13 @@ class MobilForm
                 Section::make('Klasifikasi Mobil')
                     ->description('Pilih data dari master data (Merk, Tipe, Kelas).')
                     ->schema([
+
+                        FileUpload::make('mobil_image')
+                            ->label('Foto Mobil')
+                            ->image() 
+                            ->directory('uploads/mobil') 
+                            ->columnSpanFull(), 
+
                         // 1. Merk (Dropdown)
                         Select::make('merk_id')
                             ->relationship('merk', 'merk_nama')
