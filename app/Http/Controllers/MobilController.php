@@ -22,7 +22,7 @@ class MobilController extends Controller
     }
     public function tampilMobil()
     {
-        $mobils = Mobil::with(['merk', 'carclass'])
+        $mobils = Mobil::with(['merk', 'carclass', 'seat'])
             ->paginate(10);
 
         return view('kasir.mobil', compact('mobils'));

@@ -64,7 +64,7 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
-
+    
     // DASHBOARD
     Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
         ->name('kasir.dashboard');

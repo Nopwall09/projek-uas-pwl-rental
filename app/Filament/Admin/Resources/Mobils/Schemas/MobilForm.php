@@ -22,10 +22,8 @@ class MobilForm
                     FileUpload::make('mobil_image')
                         ->label('Foto Mobil')
                         ->image()
-                        ->imagePreviewHeight(200)
-                        ->columnSpanFull()
-                        ->required(),
-
+                        ->directory('mobil') // otomatis ke storage/app/public/mobil
+                        ->disk('public'),  // pakai disk public agar bisa diakses via URL
                     Select::make('merk_id')
                         ->relationship('merk', 'merk_nama')
                         ->label('Merk')

@@ -20,5 +20,6 @@ class Merk extends Model
     {
         return $this->hasMany(Mobil::class, 'merk_id', 'merk_id');
     }
+    
 }
 
