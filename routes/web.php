@@ -6,7 +6,6 @@ use App\Http\Controllers\RentalItemController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ChatController;
 
 /*
@@ -38,12 +37,10 @@ Route::middleware(['user'])->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/feedback', [FeedbackController::class, 'store'])
-        ->name('feedback.store');
     Route::get('/katalog', [MobilController::class, 'katalog'])->name('katalog');
 
     Route::get('/pesanan-saya', [RentalItemController::class, 'pesananSaya'])->name('pesanan-saya');
-    Route::post('/pesanan/store', [RentalItemController::class, 'store'])->name('pesanan.store');
+    // Route::post('/pesanan/store', [RentalItemController::class, 'store'])->name('pesanan.store');
 
     Route::get('/mobil/{mobil}', [MobilController::class, 'detail'])->name('pesanan.detail');
     // Route::get('/pesanan-saya',function(){
@@ -67,32 +64,42 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
+
+    // DASHBOARD
     Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
-        ->name('kasir.dashboard')
-        ->middleware('kasir');
-    //Buat CREATE
+        ->name('kasir.dashboard');
+
+    // CREATE TRANSAKSI
     Route::get('/kasir/create', [RentalItemController::class, 'create'])
         ->name('kasir.create');
 
-    // SIMPAN TRANSAKSI
-    Route::post('/kasir', [RentalItemController::class, 'store'])
+    // SIMPAN TRANSAKSI OFFLINE
+    Route::post('/kasir/store', [RentalItemController::class, 'storeoffline'])
         ->name('kasir.store');
 
-    // LIST TRANSAKSI
-    Route::get('/kasir', [RentalItemController::class, 'index'])
-        ->name('kasir.index');
+    // DATA TRANSAKSI
+    Route::get('/kasir/transaksi', [RentalItemController::class, 'index'])
+        ->name('kasir.transaksi');
 
-    //Buat UPDATE
-    Route::get('/kasir/update', [RentalItemController::class, 'update'])
+    // EDIT / PERPANJANG
+    Route::get('/kasir/{id}/edit', [RentalItemController::class, 'edit'])
+        ->name('kasir.edit');
+    Route::get('/kasir/{id}/struk', [RentalItemController::class, 'struk'])
+    ->name('kasir.struk');
+    Route::get('/kasir/mobil', [MobilController::class, 'tampilMobil'])
+        ->name('kasir.mobil');
+    Route::put('/kasir/{id}', [RentalItemController::class, 'update'])
         ->name('kasir.update');
 
-    //Buat DELETE
+    // SELESAIKAN SEWA
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])
-    ->name('kasir.destroy');
-    Route::get('/laporan', [RentalItemController::class, 'pesananSaya'])->name('pesanan-saya');
+        ->name('kasir.destroy');
 
-
+    // LAPORAN
+    Route::get('/kasir/laporan', [RentalItemController::class, 'laporan'])
+        ->name('kasir.laporan');
 });
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('/admin/chat', [ChatController::class, 'adminChatList']);

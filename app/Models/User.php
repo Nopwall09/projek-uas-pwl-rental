@@ -1,18 +1,20 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
     protected $primaryKey = 'user_id';
     public $incrementing = true;
     protected $keyType = 'int';
-
 
     protected $fillable = [
         'name',
@@ -33,15 +35,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->role === 'admin';
+    }
+
     public function rentalItems()
     {
         return $this->hasMany(RentalItem::class, 'user_id', 'user_id');
     }
-
-    // public function logAktivitas()
-    // {
-    //     // return $this->hasMany(LogAktivitas::class, 'user_id', 'user_id');
-    // }
 
     public function historyRentals()
     {

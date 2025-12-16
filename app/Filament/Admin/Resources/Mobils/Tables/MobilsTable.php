@@ -16,40 +16,26 @@ class MobilsTable
     {
         return $table
             ->columns([
-                // Gambar Kecil Kotak
+
                 ImageColumn::make('mobil_image')
                     ->label('Foto')
+                    ->disk('public')
                     ->square(),
-                    
 
-                // Nama Merk (Tebal)
+                TextColumn::make('nama_mobil')
+                    ->label('Nama'),
+
                 TextColumn::make('merk.merk_nama')
-                    ->label('Merk')
-                    ->weight('bold')
-                    ->searchable()
-                    ->sortable(),
-
-                // Plat Nomor
-                TextColumn::make('mobil_plat')
-                    ->label('Plat No')
-                    ->searchable(),
-
-                // // Status dengan Warna-Warni (Fitur Keren)
-                // TextColumn::make('status.status_nama')
-                //     ->label('Status'),
-
-                // Tipe & Kelas
-                TextColumn::make('tipe.tipe_nama')
-                    ->label('Tipe'),
+                    ->label('Merk'),
 
                 TextColumn::make('carclass.class_nama')
                     ->label('Kelas'),
 
-                // Harga Format Rupiah
                 TextColumn::make('harga_rental')
                     ->label('Harga')
-                    ->money('IDR')
-                    ->sortable(),
+                    ->money('IDR'),
+
+
             ])
             ->filters([
                 //

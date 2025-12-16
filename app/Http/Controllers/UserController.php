@@ -16,7 +16,7 @@ class UserController extends Controller
         $users = User::with('rules')->paginate(10);
         return response()->json($users);
     }
-
+    
     public function store(Request $request)
     {
         $validated = $request->validate([

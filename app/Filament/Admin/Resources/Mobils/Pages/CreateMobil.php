@@ -8,4 +8,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMobil extends CreateRecord
 {
     protected static string $resource = MobilResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        // Tetap di halaman tambah setelah simpan
+        return $this->getUrl();
+    }
 }

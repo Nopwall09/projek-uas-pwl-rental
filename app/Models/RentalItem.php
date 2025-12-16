@@ -4,63 +4,42 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class RentalItem extends Model
 {
-    use HasFactory;
-
     protected $table = 'rental_item';
     protected $primaryKey = 'rental_id';
-    public $timestamps = false;
 
     protected $fillable = [
         'user_id',
         'mobil_id',
         'driver_id',
+        'nama_Pelanggan',
         'lama_rental',
         'pilihan',
-        'tgl',
+        'tgl_sewa',
+        'tgl_kembali',
         'total_sewa',
         'booking_source',
         'jaminan',
     ];
 
     protected $casts = [
-        'tgl' => 'date',
-        'total_sewa' => 'decimal:2',
+        'tgl_sewa'    => 'date',
+        'tgl_kembali' => 'date',
+        'total_sewa'  => 'decimal:2',
     ];
-
-    /* ================= RELATIONS ================= */
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
-    }
 
     public function mobil()
     {
-        return $this->belongsTo(Mobil::class, 'mobil_id', 'mobil_id');
+        return $this->belongsTo(Mobil::class, 'mobil_id');
     }
 
     public function driver()
     {
-        return $this->belongsTo(Driver::class, 'driver_id', 'driver_id');
+        return $this->belongsTo(Driver::class, 'driver_id');
     }
-
-    public function transaksi()
+    public function user()
     {
-        return $this->hasOne(Transaksi::class, 'rental_id', 'rental_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function feedback()
-    {
-        return $this->hasOne(Feedback::class, 'rental_id', 'rental_id');
-    }
-
-    public function historyRentals()
-    {
-        return $this->hasMany(HistoryRental::class, 'rental_id', 'rental_id');
-    }
-
-
 }

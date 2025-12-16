@@ -19,19 +19,19 @@ class AuthController extends Controller
             $role = Auth::user()->role;
 
             if ($role === 'admin') {
-                return redirect('/admin'); // Filament
+                return redirect('/admin');
             }
 
             if ($role === 'kasir') {
                 return redirect()->route('kasir.dashboard');
             }
-            
 
-            return redirect()->route('login'); 
+            return redirect()->route('home'); // ⬅️ BUKAN login
         }
 
         return view('auth.login');
     }
+
 
     /**
      * Proses login
@@ -49,6 +49,7 @@ class AuthController extends Controller
             $role = Auth::user()->role;
 
             if ($role === 'admin') {
+                Auth::logout();
                 return redirect('/admin');
             }
 

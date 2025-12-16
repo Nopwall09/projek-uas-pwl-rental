@@ -4,8 +4,9 @@ namespace App\Filament\Admin\Resources\Mobils\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\FileUpload;
 
@@ -13,72 +14,71 @@ class MobilForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                Section::make('Input Data Mobil')
-                    ->description('Silakan lengkapi data mobil dan upload fotonya.')
-                    ->schema([
-                        // 1. Foto (Paling Atas, Lebar Penuh)
-                        FileUpload::make('mobil_image')
-                            ->label('Foto Mobil')
-                            ->image()
-                            ->directory('uploads/mobil')
-                            ->columnSpanFull() // Memanjang full
-                            ->required(),
+        return $schema->components([
+            Section::make('Input Data Mobil')
+                ->columns(2)
+                ->components([
 
-                        // 2. Data Klasifikasi (Dropdown Relasi)
-                        Select::make('merk_id')
-                            ->relationship('merk', 'merk_nama')
-                            ->label('Merk')
-                    
-                            ->preload()
-                            ->required(),
+                    FileUpload::make('mobil_image')
+                        ->label('Foto Mobil')
+                        ->image()
+                        ->imagePreviewHeight(200)
+                        ->columnSpanFull()
+                        ->required(),
 
-                        Select::make('tipe_id')
-                            ->relationship('tipe', 'tipe_nama')
-                            ->label('Tipe Bodi')
-                
-                            ->required(),
+                    Select::make('merk_id')
+                        ->relationship('merk', 'merk_nama')
+                        ->label('Merk')
+                        ->required(),
 
-                        Select::make('class_id')
-                            ->relationship('carclass', 'class_nama')
-                            ->label('Kelas')
-                            ->required(),
+                    TextInput::make('nama_mobil')
+                        ->label('Nama Mobil')
+                        ->required(),
 
-                        // Select::make('status_id')
-                        //     ->relationship('status', 'status')
-                        //     ->label('Status')
-                        //     ->native(false)
-                        //     ->required(),
+                    Select::make('class_id')
+                        ->relationship('carclass', 'class_nama')
+                        ->label('Kelas')
+                        ->required(),
 
-                        // 3. Data Fisik Mobil
-                        TextInput::make('mobil_plat')
-                            ->label('Plat Nomor')
-                            ->placeholder('Contoh: AG 1234 XY')
-                            ->required(),
+                    Select::make('seat_id')
+                        ->relationship('seat', 'seat_jumlah')
+                        ->label('Jumlah Seat')
+                        ->required(),
 
-                        TextInput::make('mobil_tahun')
-                            ->label('Tahun')
-                            ->numeric()
-                            ->required(),
+                    Repeater::make('fasilitas')
+                        ->label('Fasilitas Mobil')
+                        ->schema([
+                            TextInput::make('nama')
+                                ->label('Nama Fasilitas')
+                                ->required(),
+                        ])
+                        ->addActionLabel('Tambah Fasilitas')
+                        ->minItems(1)
+                        ->columnSpanFull(),
 
-                        TextInput::make('mobil_warna')
-                            ->label('Warna')
-                            ->required(),
+                    Select::make('Transmisi')
+                        ->options([
+                            'Manual' => 'Manual',
+                            'Matic'  => 'Matic',
+                        ])
+                        ->required(),
 
-                        Select::make('Transmisi')
-                            ->options(['Manual' => 'Manual', 'Matic' => 'Matic'])
-                            ->required(),
+                    TextInput::make('mobil_warna')->required(),
 
-                        // 4. Harga
-                        TextInput::make('harga_rental')
-                            ->label('Harga Sewa (Per Hari)')
-                            ->prefix('Rp')
-                            ->numeric()
-                            ->columnSpanFull() // Harga dibuat panjang biar jelas
-                            ->required(),
+                    TextInput::make('mobil_plat')->required(),
 
-                    ])->columns(2) // 🔥 Ini kuncinya: Membagi layout jadi 2 kolom
-            ]);
+                    TextInput::make('mobil_tahun')
+                        ->numeric()
+                        ->minValue(1990)
+                        ->maxValue(now()->year)
+                        ->required(),
+                    TextInput::make('harga_rental')
+                        ->label('Biaya Driver / Hari')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->default(0)
+                        ->required(),
+                ]),
+        ]);
     }
 }

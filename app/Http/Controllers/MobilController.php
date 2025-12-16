@@ -13,7 +13,7 @@ class MobilController extends Controller
         $mobils = Mobil::with([
             'merk',
             'carclass',
-            'tipe',
+            'nama_mobil',
             'fasilitas',
             'feedbacks'
         ])->paginate(10);
@@ -22,10 +22,12 @@ class MobilController extends Controller
     }
     public function tampilMobil()
     {
-        $mobils = Mobil::with(['merk', 'carclass', 'tipe'])->paginate(10); // Bisa tambah relasi lain kalau perlu
+        $mobils = Mobil::with(['merk', 'carclass'])
+            ->paginate(10);
 
         return view('kasir.mobil', compact('mobils'));
     }
+
     public function detail(Mobil $mobil)
     {
         return view('pesanan.detail', compact('mobil'));
@@ -33,41 +35,28 @@ class MobilController extends Controller
     
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'merk_id' => 'required|exists:merk,merk_id',
-            'class_id' => 'required|exists:class,class_id',
-            'tipe_id' => 'required|exists:tipe,tipe_id',
-            'feedback_id' => 'nullable|exists:feedback,feedback_id',
-            'mobil_status' => 'required|in:Tersedia,Disewa',
-            'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'Transmisi' => 'required|in:Manual,Matic',
-            'mobil_warna' => 'required|string|max:50',
-            'mobil_plat' => 'required|string|max:30|unique:mobil,mobil_plat',
-            'mobil_tahun' => 'required|string|size:4',
-            'harga_rental' => 'required|numeric|min:0',
-            'fasilitas' => 'sometimes|array',
-            'fasilitas.*' => 'exists:fasilitas,fasilitas_id',
+        $request->validate([
+            'merk_id'      => 'required|exists:merk,merk_id',
+            'class_id'     => 'required|exists:class,class_id',
+            'nama_mobil'   => 'required|string|max:100',
+            'fasilitas'    => 'required|string',
+            'Transmisi'    => 'required|in:Manual,Matic',
+            'mobil_warna'  => 'required|string|max:50',
+            'mobil_plat'   => 'required|string|max:30|unique:mobil,mobil_plat',
+            'mobil_tahun'  => 'required|string|size:4',
+            'harga_rental' => 'required|numeric',
+            'mobil_image'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $data = $request->all();
+
         if ($request->hasFile('mobil_image')) {
-            $image = $request->file('mobil_image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            $validated['mobil_image'] = $image->storeAs('mobil', $filename, 'public');
+            $data['mobil_image'] = $request->file('mobil_image')->store('mobil', 'public');
         }
 
-        $fasilitas = $validated['fasilitas'] ?? [];
-        unset($validated['fasilitas']);
+        Mobil::create($data);
 
-        $mobil = Mobil::create($validated);
-
-        if (!empty($fasilitas)) {
-            $mobil->fasilitas()->attach($fasilitas);
-        }
-
-        return response()->json([
-            'message' => 'Mobil berhasil ditambahkan',
-            'data' => $mobil->load(['merk', 'carclass', 'tipe', 'fasilitas'])
-        ], 201);
+        return back()->with('success', 'Mobil berhasil ditambahkan');
     }
 
     public function show($id)
@@ -91,8 +80,8 @@ class MobilController extends Controller
             'merk_id' => 'sometimes|required|exists:merk,merk_id',
             'class_id' => 'sometimes|required|exists:class,class_id',
             'tipe_id' => 'sometimes|required|exists:tipe,tipe_id',
-            'feedback_id' => 'sometimes|nullable|exists:feedback,feedback_id',
             'mobil_status' => 'sometimes|required|in:Tersedia,Disewa',
+            'feedback'      => 'nullable|string',
             'mobil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'Transmisi' => 'sometimes|required|in:Manual,Matic',
             'mobil_warna' => 'sometimes|required|string|max:50',
@@ -128,9 +117,7 @@ class MobilController extends Controller
 
     public function home()
     {
-        $mobils = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('mobil_status', 'Tersedia')
-            ->get();
+        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
 
         return view('home', compact('mobils'));
     }
@@ -160,7 +147,7 @@ class MobilController extends Controller
         ));
     }
 
-
+    
 
     public function destroy($id)
     {

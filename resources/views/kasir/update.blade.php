@@ -4,32 +4,38 @@
 @section('content')
 <div class="container">
 
-    <h3 class="mb-4">Edit Transaksi Rental</h3>
+    <h3 class="mb-4">Edit / Perpanjang Transaksi Rental</h3>
 
     <form action="{{ route('kasir.update', $rental->rental_id) }}" method="POST">
         @csrf
         @method('PUT')
 
-        {{-- MODE --}}
+        {{-- JENIS TRANSAKSI --}}
         <div class="mb-3">
             <label>Jenis Transaksi</label>
-            <input type="text" class="form-control"
-                   value="{{ $rental->booking_source }}"
+            <input type="text"
+                   class="form-control"
+                   value="{{ ucfirst($rental->booking_source) }}"
                    disabled>
         </div>
 
-        {{-- USER / OFFLINE --}}
+        {{-- ONLINE / OFFLINE --}}
         @if ($rental->booking_source === 'online')
             <div class="mb-3">
-                <label>User ID</label>
-                <input type="text" name="user_id" class="form-control"
-                       value="{{ $rental->user_id }}">
+                <label>User</label>
+                <input type="text"
+                       class="form-control"
+                       value="{{ $rental->user->name ?? 'User tidak ditemukan' }}"
+                       disabled>
             </div>
         @else
             <div class="mb-3">
                 <label>Nama Pelanggan</label>
-                <input type="text" name="nama_Pelanggan" class="form-control"
-                       value="{{ $rental->Nama_Pelanggan }}">
+                <input type="text"
+                       name="nama_Pelanggan"
+                       class="form-control"
+                       value="{{ $rental->nama_Pelanggan }}"
+                       required>
             </div>
         @endif
 
@@ -40,8 +46,12 @@
                 @foreach ($mobils as $mobil)
                     <option value="{{ $mobil->mobil_id }}"
                         {{ $mobil->mobil_id == $rental->mobil_id ? 'selected' : '' }}
-                        {{ $mobil->status === 'Disewa' && $mobil->mobil_id != $rental->mobil_id ? 'disabled' : '' }}>
-                        {{ $mobil->mobil_plat }} | {{ $mobil->Transmisi }} | {{ $mobil->status }}
+                        {{ $mobil->mobil_status === 'Disewa' && $mobil->mobil_id != $rental->mobil_id ? 'disabled' : '' }}>
+                        {{ $mobil->merk->merk_nama ?? '-' }}
+                        {{ $mobil->nama_mobil }}
+                        | {{ $mobil->mobil_plat }}
+                        | {{ $mobil->Transmisi }}
+                        | {{ $mobil->mobil_status }}
                     </option>
                 @endforeach
             </select>
@@ -49,19 +59,25 @@
 
         {{-- DURASI --}}
         <div class="mb-3">
-            <label>Durasi Rental</label>
-            <input type="text" name="lama_rental" class="form-control"
-                   value="{{ $rental->lama_rental }}">
+            <label>Lama Rental (Hari)</label>
+            <input type="number"
+                   name="lama_rental"
+                   class="form-control"
+                   min="1"
+                   value="{{ $rental->lama_rental }}"
+                   required>
         </div>
 
         {{-- PILIHAN --}}
         <div class="mb-3">
             <label>Pilihan</label>
-            <select name="pilihan" class="form-control">
-                <option value="lepas kunci" {{ $rental->pilihan == 'lepas kunci' ? 'selected' : '' }}>
+            <select name="pilihan" class="form-control" required>
+                <option value="lepas kunci"
+                    {{ $rental->pilihan === 'lepas kunci' ? 'selected' : '' }}>
                     Lepas Kunci
                 </option>
-                <option value="dengan driver" {{ $rental->pilihan == 'dengan driver' ? 'selected' : '' }}>
+                <option value="dengan driver"
+                    {{ $rental->pilihan === 'dengan driver' ? 'selected' : '' }}>
                     Dengan Driver
                 </option>
             </select>
@@ -69,27 +85,53 @@
 
         {{-- TANGGAL --}}
         <div class="mb-3">
-            <label>Tanggal Rental</label>
-            <input type="date" name="tgl" class="form-control"
-                   value="{{ $rental->tgl }}">
+            <label>Tanggal Sewa</label>
+            <input type="date"
+                   class="form-control"
+                   value="{{ $rental->tgl_sewa->format('Y-m-d') }}"
+                   disabled>
+        </div>
+
+        <div class="mb-3">
+            <label>Tanggal Kembali</label>
+            <input type="date"
+                   name="tgl_kembali"
+                   class="form-control"
+                   value="{{ $rental->tgl_kembali->format('Y-m-d') }}"
+                   required>
         </div>
 
         {{-- TOTAL --}}
         <div class="mb-3">
             <label>Total Sewa</label>
-            <input type="number" name="total_sewa" class="form-control"
-                   value="{{ $rental->total_sewa }}">
+            <input type="number"
+                   name="total_sewa"
+                   class="form-control"
+                   value="{{ $rental->total_sewa }}"
+                   required>
         </div>
 
         {{-- JAMINAN --}}
         <div class="mb-3">
             <label>Jaminan</label>
-            <input type="text" name="jaminan" class="form-control"
-                   value="{{ $rental->jaminan }}">
+            <input type="text"
+                   name="jaminan"
+                   class="form-control"
+                   value="{{ $rental->jaminan }}"
+                   required>
         </div>
 
-        <button class="btn btn-primary">Update</button>
-        <a href="{{ route('kasir.index') }}" class="btn btn-secondary">Batal</a>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary">
+                Update
+            </button>
+
+            <a href="{{ route('kasir.transaksi') }}"
+               class="btn btn-secondary">
+                Batal
+            </a>
+        </div>
+
     </form>
 
 </div>

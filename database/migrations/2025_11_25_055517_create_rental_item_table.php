@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('nama_Pelanggan', 100)->nullable();
             $table->string('lama_rental', 25);
             $table->string('pilihan', 30);
-            $table->date('tgl');
+            $table->date('tgl_sewa');
+            $table->date('tgl_kembali');
             $table->decimal('total_sewa', 10, 2);
             $table->enum('booking_source', ['online', 'offline'])->default('offline');
             $table->string('jaminan', 30);

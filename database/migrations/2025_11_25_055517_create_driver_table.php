@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('driver', function (Blueprint $table) {
             $table->id('driver_id');
+            $table->enum('status', ['Tersedia', 'Booked'])->default('Tersedia');
+            $table->decimal('biaya_driver', 10, 2)->default(0);
             $table->string('driver_nama', 50)->nullable();
             $table->string('driver_no_sim', 20)->nullable();
             $table->string('driver_no_telp', 15)->nullable();

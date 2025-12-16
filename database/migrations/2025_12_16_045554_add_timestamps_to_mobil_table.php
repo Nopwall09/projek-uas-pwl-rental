@@ -9,20 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('seat', function (Blueprint $table) {
-            $table->id('seat_id');
-            $table->string('seat_jumlah', 30)->nullable();
+        Schema::table('mobil', function (Blueprint $table) {
+            $table->timestamps();
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('seat');
+        Schema::table('mobil', function (Blueprint $table) {
+            $table->dropTimestamps();
+        });
     }
+
 };

@@ -9,12 +9,13 @@
         <h1 class="mb-0">Dashboard Kasir</h1>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('kasir.store') }}" class="btn btn-primary">
+            <a href="{{ route('kasir.create') }}" class="btn btn-primary">
                 + Transaksi Baru
             </a>
-            <a href="{{ route('kasir.dashboard') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('kasir.transaksi') }}" class="btn btn-outline-secondary">
                 Data Transaksi
             </a>
+
         </div>
     </div>
 
@@ -67,7 +68,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title mb-0">Sewa Aktif</h5>
-                <a href="{{ route('kasir.dashboard') }}" class="btn btn-sm btn-outline-primary">
+                <a href="{{ route('kasir.transaksi') }}" class="btn btn-sm btn-outline-primary">
                     Lihat Semua
                 </a>
             </div>
@@ -85,44 +86,48 @@
                 </thead>
 
                 <tbody>
-                    @forelse ($sewaAktif as $item)
-                        <tr>
-                            <td>{{ $item->user_id }}</td>
-                            <td>{{ $item->mobil->nama_mobil ?? '-' }}</td>
-                            <td>{{ $item->tgl }}</td>
-                            <td>{{ $item->jatuh_tempo }}</td>
-                            <td>
-                                <span class="badge bg-warning">Disewa</span>
-                            </td>
-                            <td class="d-flex gap-1">
+                @forelse ($sewaAktif as $item)
+                <tr>
+                    <td>{{ $item->nama_Pelanggan }}</td>
+                    <td>{{ $item->mobil->nama_mobil ?? '-' }}</td>
+                    <td>{{ $item->tgl_sewa }}</td>
+                    <td>{{ $item->tgl_kembali }}</td>
+                    <td>
+                        <span class="badge bg-warning">Disewa</span>
+                    </td>
+                    <td class="d-flex gap-1">
 
-                                <!-- SELESAI (DELETE) -->
-                                <form action="{{ route('kasir.destroy', $item->rental_id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Selesaikan sewa? Mobil akan tersedia kembali.')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-success">
-                                        Selesai
-                                    </button>
-                                </form>
+                        <form action="{{ route('kasir.destroy', $item->rental_id) }}"
+                            method="POST"
+                            onsubmit="return confirm('Selesaikan sewa?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-success">Selesai</button>
+                        </form>
+\
+                        <a href="{{ route('kasir.edit', $item->rental_id) }}"
+                        class="btn btn-sm btn-warning">
+                            Perpanjang
+                        </a>
+                        <a href="{{ route('kasir.struk', $item->rental_id) }}"
+                        target="_blank"
+                        class="btn btn-sm btn-secondary">
+                            Cetak
+                        </a>
 
-                                <!-- PERPANJANG -->
-                                <a href="{{ route('kasir.update', $item->rental_id) }}"
-                                   class="btn btn-sm btn-warning">
-                                    Perpanjang
-                                </a>
 
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">
-                                Tidak ada sewa aktif
-                            </td>
-                        </tr>
-                    @endforelse
+
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        Tidak ada sewa aktif
+                    </td>
+                </tr>
+                @endforelse
                 </tbody>
+
             </table>
 
         </div>
