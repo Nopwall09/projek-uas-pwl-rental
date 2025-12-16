@@ -1,126 +1,102 @@
-<link rel="stylesheet" href="{{ asset('css/detail.css') }}">
-<main class="page-wrap">
-        <div class="container">
-            <!-- LEFT: DETAIL -->
-            <article class="detail-card">
-                <div class="media-and-title">
-                    <div class="media">
-                        <img src="{{ asset('img/car.png') }}" alt="Car image" />
-                    </div>
-                    <h1 class="car-title">Nama Mobil</h1>
-                </div>
+@include('layouts.navbar')
 
-                <hr class="sep">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Konfirmasi Pemesanan</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
 
-                <section class="specs">
-                    <h3>Rincian Unit:</h3>
-                    <div class="icons">
-                        <div class="icon-row">
-                            <div class="icon-item">
-                                <span class="big"></span>
-                                <div class="meta">0</div>
-                            </div>
-                            <div class="icon-item">
-                                <span class="big"></span>
-                                <div class="meta">Matic</div>
-                            </div>
-                            <div class="icon-item">
-                                <span class="big"></span>
-                                <div class="meta">City Car</div>
-                            </div>
-                            <div class="icon-item">
-                                <span class="big"></span>
-                                <div class="meta">Bensin</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+<section style="padding:60px 8%;">
+    <h1>Konfirmasi Pemesanan</h1>
 
-                <hr class="sep">
-
-                <section class="desc">
-                    <h3>Rincian Unit:</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vehicula rhoncus mauris a condimentum.
-                        Mauris facilisis finibus mauris nec sodales. Mauris tempus feugiat lorem, ut iaculis eros fringilla vitae.
-                    </p>
-                </section>
-
-                <div class="cta-row">
-                    <a href="" class="btn-contact">
-                        <span class="phone-icon"></span> Hubungi Kami
-                    </a>
-                </div>
-
-                <section class="howto">
-                    <h3>Cara Memesan:</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer et pretium erat. Morbi porttitor quis velit at ultricies.
-                    </p>
-                </section>
-
-                <section class="payment">
-                    <h3>Menyelesaikan pembayaran:</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue massa blandit mollis egestas.
-                    </p>
-                </section>
-
-                <section class="confirm">
-                    <h3>Konfirmasi pembayaran:</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue massa blandit mollis egestas.
-                    </p>
-                </section>
-            </article>
-
-            <!-- RIGHT: SIDEBAR BOOKING -->
-            <aside class="sidebar-booking">
-                <div class="price-head">
-                    <div class="price-title">Mulai Dari</div>
-                    <div class="price">Rp. -</div>
-                </div>
-
-                <form class="booking-form" id="bookingForm" onsubmit="return false;">
-                    <label>Email
-                        <input type="email" name="email" placeholder="email@gmail.com" required>
-                    </label>
-
-                    <label>Nama Lengkap
-                        <input type="text" name="name" placeholder="Nama lengkap" required>
-                    </label>
-
-                    <label>No. Hp
-                        <input type="tel" name="phone" placeholder="08xxxxxxxxxx" required>
-                    </label>
-
-                    <div class="date-row">
-                        <label>Tanggal Ambil
-                            <input type="date" name="pickup">
-                        </label>
-                        <label>Tanggal Kembali
-                            <input type="date" name="return">
-                        </label>
-                    </div>
-
-                    <fieldset class="facilities">
-                        <legend>Fasilitas Tambahan :</legend>
-                        <label><input type="checkbox" name="driver" value="with-driver"> Dengan Driver</label>
-                        <label><input type="checkbox" name="nodriver" value="without-driver"> Tanpa Driver</label>
-                    </fieldset>
-
-                    <div class="total-line">
-                        <span>Total :</span>
-                        <span id="totalPrice">Rp. 0</span>
-                    </div>
-
-                    
-                </form>
-                <button class="btn-book" id="bookBtn" href="{{ route('Konfirmasi') }}">Pesan Sekarang</button>
-            </aside>
+    {{-- ERROR VALIDASI --}}
+    @if ($errors->any())
+        <div style="background:#fdd;padding:15px;border-radius:10px;margin-bottom:20px;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li style="color:red;">{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </main>
+    @endif
 
-    <script src="{{ asset('js/script.js') }}"></script>
+    <form action="{{ route('pesanan.store') }}" method="POST">
+        @csrf
+
+        <!-- INFO MOBIL -->
+        <div style="display:flex;gap:40px;flex-wrap:wrap;margin-bottom:30px;">
+            <img 
+                src="{{ asset('storage/'.$mobil->mobil_image) }}" 
+                style="width:320px;border-radius:15px;"
+            >
+
+            <div>
+                <h2>
+                    {{ $mobil->merk->merk_nama }} 
+                    {{ $mobil->tipe->tipe_nama ?? '' }}
+                </h2>
+
+                <p>Harga / hari :
+                    <strong>
+                        Rp {{ number_format($mobil->harga_rental,0,',','.') }}
+                    </strong>
+                </p>
+
+                <p>Transmisi : {{ $mobil->Transmisi }}</p>
+                <p>Warna : {{ $mobil->mobil_warna }}</p>
+            </div>
+        </div>
+
+        <!-- INPUT SEWA -->
+        <div style="max-width:400px;">
+            <label>Lama Sewa (hari)</label>
+            <input type="number" name="lama_rental" min="1" required>
+
+            <label>Tanggal Mulai</label>
+            <input type="date" name="tgl" required>
+
+            <label>Opsi Sewa</label>
+            <select name="pilihan" required>
+                <option value="">-- Pilih --</option>
+                <option value="Dengan Driver">Dengan Driver</option>
+                <option value="Tanpa Driver">Tanpa Driver</option>
+            </select>
+
+            <label>Metode Pembayaran</label>
+            <select name="jaminan" required>
+                <option value="">-- Pilih --</option>
+                <option value="Transfer BCA">Transfer BCA</option>
+                <option value="Tunai">Tunai</option>
+            </select>
+        </div>
+
+        <!-- DATA TERSEMBUNYI -->
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+        <input type="hidden" name="mobil_id" value="{{ $mobil->mobil_id }}">
+        <input type="hidden" name="booking_source" value="online">
+
+        <!-- TOTAL -->
+        <input type="hidden" name="total_sewa" 
+            value="{{ $mobil->harga_rental }}">
+
+        <br><br>
+
+        <button type="submit" style="
+            background:#163a63;
+            color:white;
+            padding:12px 40px;
+            border:none;
+            border-radius:25px;
+            font-size:16px;
+            cursor:pointer;
+        ">
+            Konfirmasi & Pesan
+        </button>
+    </form>
+</section>
+
 </body>
 </html>

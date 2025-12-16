@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Events\MessageSent;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -40,7 +41,7 @@ class ChatController extends Controller
     public function sendMessage(Request $request)
     {
         Message::create([
-            'user_id'     => auth()->id(),
+            'user_id' => auth('admin')->id(),
             'sender_role' => 'user',
             'message'     => $request->message,
         ]);
@@ -66,9 +67,16 @@ class ChatController extends Controller
     // LOAD CHAT USER (USER)
     // ======================
     public function getMessages()
-    {
-        return Message::where('user_id', auth()->id())
-            ->orderBy('created_at')
-            ->get();
-    }
+{
+    // Untuk user biasa
+    $userId = auth('web')->id();
+
+    // Untuk admin
+    // $userId = auth('admin')->id();
+
+    return Message::where('user_id', $userId)
+        ->orderBy('created_at')
+        ->get();
+}
+
 }

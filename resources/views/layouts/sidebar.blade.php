@@ -5,6 +5,7 @@
         <h4 class="mb-4">Rental Mobil</h4>
 
         <ul class="nav nav-pills flex-column gap-1">
+
             <li class="nav-item">
                 <a href="{{ route('kasir.dashboard') }}" class="nav-link text-white">
                     Dashboard
@@ -12,23 +13,28 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('transaksi.index') }}" class="nav-link text-white">
+                {{-- LIST TRANSAKSI --}}
+                <a href="{{ route('kasir.index') }}" class="nav-link text-white">
                     Transaksi
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('kasir.mobil') }}" class="nav-link text-white">
+                {{-- BELUM ADA ROUTE MOBIL UNTUK KASIR --}}
+                <a href="{{ route('kasir.update') }}" class="nav-link text-white disabled">
                     Mobil
                 </a>
             </li>
- 
+
             <li class="nav-item">
-                <a href="{{ route('laporan.index') }}" class="nav-link text-white">
+                {{-- BELUM ADA ROUTE LAPORAN --}}
+                <a href="#" class="nav-link text-white disabled">
                     Laporan
                 </a>
             </li>
+
         </ul>
+
 
         <hr class="border-secondary">
 

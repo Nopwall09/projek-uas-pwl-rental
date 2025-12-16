@@ -23,7 +23,7 @@ class RentalItemController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,user_id',
             'mobil_id' => 'required|exists:mobil,mobil_id',
             'lama_rental' => 'required|numeric|min:1',
             'total_sewa' => 'required|numeric|min:0',
@@ -35,21 +35,20 @@ class RentalItemController extends Controller
 
         $rental = RentalItem::create($validated);
 
-        // update status mobil jadi disewa
-        $mobil = Mobil::find($validated['mobil_id']);
-        if ($mobil) {
-            $mobil->update(['mobil_status' => 'Disewa']);
-        }
+        Mobil::where('mobil_id', $validated['mobil_id'])
+            ->update(['mobil_status' => 'Disewa']);
 
-        return redirect()->route('kasir.tampilTransaksi')
-            ->with('success', 'Transaksi berhasil ditambahkan!');
+        return redirect()
+            ->route('pesanan-saya')
+            ->with('success', 'Pesanan berhasil dibuat!');
+
     }
 
     /* =====================================================
      | DASHBOARD KASIR
      ===================================================== */
     public function dashboard()
-    {
+{
         // Mobil tersedia & disewa (ENUM COLUMN, BUKAN RELATION)
         $mobilTersedia = Mobil::where('mobil_status', 'Tersedia')->count();
         $mobilDisewa = Mobil::where('mobil_status', 'Disewa')->count();
@@ -125,6 +124,10 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
+    public function detail(Mobil $mobil)
+    {
+        return view('mobil.detail', compact('mobil'));
+    }
 
     public function pesananSaya()
     {
@@ -138,7 +141,7 @@ class RentalItemController extends Controller
         ->orderBy('tgl', 'desc')
         ->get();
 
-        return view('profile.pesanan-saya', compact('rentals'));
+        return view('pembayaran.index');
     }
     
 

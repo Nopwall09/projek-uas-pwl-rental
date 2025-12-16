@@ -76,7 +76,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // return redirect()->route('home');
-        return view('home');
+        return redirect()->route('home');
     }
     // Register
     public function register(Request $request)

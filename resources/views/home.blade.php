@@ -56,9 +56,10 @@
 
                 <p>Rp {{ number_format($mobil->harga_rental, 0, ',', '.') }} / hari</p>
 
-                <a href="{{ url('/pemesanan/'.$mobil->mobil_id) }}">
+                <a href="{{ route('pesanan.detail', ['mobil' => $mobil->mobil_id]) }}">
                     <button>Booking</button>
                 </a>
+
             </div>
         @endforeach
 
@@ -192,9 +193,7 @@
             chatBody.scrollTop = chatBody.scrollHeight;
         });
 
-        // const channel = pusher.subscribe(
-        //     'private-chat-user-{{ auth()->user()->user_id }}'
-        // );
+        
 
         
     });

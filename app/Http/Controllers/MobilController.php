@@ -15,18 +15,22 @@ class MobilController extends Controller
             'carclass',
             'tipe',
             'fasilitas',
-            'feedback'
+            'feedbacks'
         ])->paginate(10);
 
         return response()->json($mobils);
     }
     public function tampilMobil()
     {
-        $mobils = Mobil::with(['merk', 'class', 'tipe'])->paginate(10); // Bisa tambah relasi lain kalau perlu
+        $mobils = Mobil::with(['merk', 'carclass', 'tipe'])->paginate(10); // Bisa tambah relasi lain kalau perlu
 
         return view('kasir.mobil', compact('mobils'));
     }
-
+    public function detail(Mobil $mobil)
+    {
+        return view('pesanan.detail', compact('mobil'));
+    }
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -124,37 +128,38 @@ class MobilController extends Controller
 
     public function home()
     {
-        $mobils = Mobil::with(['merk', 'status', 'class', 'tipe'])
+        $mobils = Mobil::with(['merk', 'carclass', 'tipe'])
             ->where('mobil_status', 'Tersedia')
             ->get();
 
         return view('home', compact('mobils'));
     }
 
+
     public function katalog()
     {
         $cityCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 1)
+            ->where('class_id', 1) // 1 = City Car
             ->where('mobil_status', 'Tersedia')
             ->get();
 
-
         $familyCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 1)
+            ->where('class_id', 2) // 2 = Family Car
             ->where('mobil_status', 'Tersedia')
             ->get();
 
         $luxuryCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 1)
+            ->where('class_id', 3) // 3 = Luxury Car
             ->where('mobil_status', 'Tersedia')
             ->get();
 
-        return view('katalog.index', compact(
+        return view('Katalog.index', compact(
             'cityCars',
             'familyCars',
             'luxuryCars'
         ));
     }
+
 
 
     public function destroy($id)
@@ -176,4 +181,17 @@ class MobilController extends Controller
             Mobil::where('mobil_status', 'Tersedia')->get()
         );
     }
+    public function konfirmasi(Request $request)
+    {
+        $mobil = Mobil::findOrFail($request->mobil_id);
+
+        return view('Pemesanan.index', [
+            'mobil'        => $mobil,
+            'tgl'          => $request->tgl,
+            'lama_rental'  => $request->lama_rental,
+            'pilihan'      => $request->pilihan,
+            'total_sewa'   => $mobil->harga_rental * $request->lama_rental
+        ]);
+    }
+
 }

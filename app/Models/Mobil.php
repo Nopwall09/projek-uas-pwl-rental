@@ -61,7 +61,7 @@ class Mobil extends Model
     {
         return $this->belongsTo(Seat::class, 'seat_id', 'seat_id');
     }
-    public function feedback()
+    public function feedbacks()
     {
         return $this->belongsTo(Feedback::class, 'feedback_id', 'feedback_id');
     }
