@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Driver;
+use App\Models\HistoryRental;
+
 
 class RentalItemController extends Controller
 {
@@ -73,6 +75,7 @@ class RentalItemController extends Controller
             'jaminan'        => $validated['jaminan'],
             'booking_source' => 'offline',
             'user_id'        => null,
+            'status'         => 'aktif',
         ]);
 
         // update status mobil
@@ -116,6 +119,7 @@ class RentalItemController extends Controller
             'pilihan'        => $validated['driver_option'],
             'booking_source' => 'online',
             'nama_Pelanggan' => null,
+            'status'         => 'aktif',
         ]);
 
         Mobil::where('mobil_id', $validated['mobil_id'])
@@ -146,8 +150,10 @@ class RentalItemController extends Controller
 
         // Sewa aktif (belum jatuh tempo)
         $sewaAktif = RentalItem::with('mobil')
-            ->whereDate('tgl_kembali', '>=', $today)
+            ->where('status', 'aktif')
+            ->whereDate('tgl_kembali', '>=', today())
             ->get();
+
 
         return view('kasir.dashboard', compact(
             'mobilTersedia',
@@ -166,18 +172,33 @@ class RentalItemController extends Controller
     {
         $rental = RentalItem::with('mobil')->findOrFail($id);
 
-        // Kembalikan status mobil
+        // 1️⃣ Update status rental
+        $rental->update([
+            'status' => 'selesai',
+            'selesai_at' => now(),
+        ]);
+
+        // 2️⃣ Kembalikan mobil
         if ($rental->mobil) {
             $rental->mobil->update([
                 'mobil_status' => 'Tersedia'
             ]);
         }
 
-        $rental->delete();
+        // 3️⃣ SIMPAN KE HISTORY
+        HistoryRental::create([
+            'history_id' => 'HIS' . str_pad(
+                HistoryRental::count() + 1, 5, '0', STR_PAD_LEFT
+            ),
+            'user_id'   => Auth::id() ?? 1, // kasir / admin
+            'rental_id' => $rental->rental_id,
+            'aksi'      => 'Menyelesaikan sewa',
+            'waktu'     => now(),
+        ]);
 
         return redirect()
             ->route('kasir.dashboard')
-            ->with('success', 'Sewa berhasil diselesaikan');
+            ->with('success', 'Sewa berhasil diselesaikan & dicatat ke history');
     }
 
     /* =====================================================
@@ -198,9 +219,13 @@ class RentalItemController extends Controller
         $rental = RentalItem::findOrFail($id);
 
         $validated = $request->validate([
-            'lama_rental' => 'required|string|max:25',
-            'tgl' => 'required|date',
-            'total_sewa' => 'required|numeric|min:0',
+            'mobil_id'     => 'required|exists:mobil,mobil_id',
+            'lama_rental'  => 'required|integer|min:1',
+            'pilihan'      => 'required|in:lepas kunci,dengan driver',
+            'tgl_kembali'  => 'required|date|after_or_equal:tgl_sewa',
+            'total_sewa'   => 'required|numeric|min:0',
+            'jaminan'      => 'required|string|max:50',
+            'nama_Pelanggan' => 'nullable|string|max:100',
         ]);
 
         $rental->update($validated);
@@ -209,10 +234,11 @@ class RentalItemController extends Controller
             ->route('kasir.dashboard')
             ->with('success', 'Sewa berhasil diperpanjang');
     }
-    public function detail(Mobil $mobil)
-    {
-        return view('mobil.detail', compact('mobil'));
-    }
+
+    // public function detail(Mobil $mobil)
+    // {
+    //     return view('mobil.detail', compact('mobil'));
+    // }
 
     public function pesananSaya()
     {

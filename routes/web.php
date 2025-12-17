@@ -95,6 +95,13 @@ Route::middleware(['kasir'])->group(function () {
     //     ->name('kasir.update');
     Route::put('/kasir/rental/{rental}', [RentalItemController::class, 'update'])->name('kasir.update');
 
+    Route::get('/kasir/history', [HistoryRentalController::class, 'index'])
+    ->name('kasir.history');
+
+    // Route::get('/kasir/history/{id}', [HistoryRentalController::class, 'detail'])
+    //     ->name('kasir.history.detail');
+    Route::get('/kasir/history/{id}/modal', [HistoryRentalController::class, 'modal'])->name('kasir.history.modal');
+
 
     // SELESAIKAN SEWA
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])

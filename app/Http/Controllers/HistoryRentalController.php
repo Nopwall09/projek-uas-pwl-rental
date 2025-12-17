@@ -63,4 +63,24 @@ class HistoryRentalController extends Controller
 
         return response()->json(['message' => 'History rental berhasil dihapus']);
     }
+    public function detail($id)
+    {
+        $history = HistoryRental::with([
+            'user',
+            'rentalitem.mobil'
+        ])->findOrFail($id);
+
+        return view('kasir.history_detail', compact('history'));
+    }
+    public function modal($id)
+    {
+        $history = HistoryRental::with([
+            'user',
+            'rentalitem.mobil'
+        ])->findOrFail($id);
+
+        return view('kasir.history_detail', compact('history'));
+    }
+
+
 }

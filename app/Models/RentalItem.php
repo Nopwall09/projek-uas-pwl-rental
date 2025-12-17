@@ -4,8 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 class RentalItem extends Model
 {
+    use HasFactory;
+
     protected $table = 'rental_item';
     protected $primaryKey = 'rental_id';
 
@@ -21,13 +24,18 @@ class RentalItem extends Model
         'total_sewa',
         'booking_source',
         'jaminan',
+        'status',
+        'selesai_at',
     ];
 
     protected $casts = [
         'tgl_sewa'    => 'date',
         'tgl_kembali' => 'date',
+        'selesai_at'  => 'datetime', // ✅
         'total_sewa'  => 'decimal:2',
     ];
+
+    /* ================= RELATION ================= */
 
     public function mobil()
     {
@@ -38,12 +46,26 @@ class RentalItem extends Model
     {
         return $this->belongsTo(Driver::class, 'driver_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function history()
     {
-        return $this->hasMany(HistoryRental::class,'rental_id', 'rental_id');
+        return $this->hasMany(HistoryRental::class, 'rental_id', 'rental_id');
+    }
+
+    /* ================= SCOPES (BONUS) ================= */
+
+    public function scopeAktif($query)
+    {
+        return $query->where('status', 'aktif');
+    }
+
+    public function scopeSelesai($query)
+    {
+        return $query->where('status', 'selesai');
     }
 }
