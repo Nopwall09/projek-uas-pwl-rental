@@ -42,4 +42,8 @@ class RentalItem extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function history()
+    {
+        return $this->hasMany(HistoryRental::class,'rental_id', 'rental_id');
+    }
 }

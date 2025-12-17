@@ -115,6 +115,18 @@
                             @endif
                         </p>
                         <p><strong>Harga / Hari:</strong> Rp {{ number_format($mobil->harga_rental, 0, ',', '.') }}</p>
+                        <p><strong>Fasilitas:</strong>
+                            @if(!empty($mobil->fasilitas) && is_array($mobil->fasilitas))
+                                <ul class="mb-0">
+                                    @foreach($mobil->fasilitas as $f)
+                                        <li>{{ $f['nama'] ?? '-' }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <span class="text-muted">Tidak ada fasilitas</span>
+                            @endif
+                        </p>
+
 
                     </div>
                 </div>

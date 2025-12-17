@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\HistoryRentalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +66,8 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['kasir'])->group(function () {
-    
+    Route::get('/driver', [DriverController::class, 'index'])->name('kasir.driver');
+    Route::get('/history', [HistoryRentalController::class, 'index'])->name('kasir.history');
     // DASHBOARD
     Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
         ->name('kasir.dashboard');
@@ -88,8 +91,10 @@ Route::middleware(['kasir'])->group(function () {
     ->name('kasir.struk');
     Route::get('/kasir/mobil', [MobilController::class, 'tampilMobil'])
         ->name('kasir.mobil');
-    Route::put('/kasir/{id}', [RentalItemController::class, 'update'])
-        ->name('kasir.update');
+    // Route::put('/kasir/{id}', [RentalItemController::class, 'update'])
+    //     ->name('kasir.update');
+    Route::put('/kasir/rental/{rental}', [RentalItemController::class, 'update'])->name('kasir.update');
+
 
     // SELESAIKAN SEWA
     Route::delete('/kasir/{id}', [RentalItemController::class, 'destroy'])

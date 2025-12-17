@@ -9,7 +9,7 @@ class DriverController extends Controller
     public function index()
     {
         $drivers = Driver::paginate(10);
-        return response()->json($drivers);
+        return view('kasir.driver', compact('drivers'));
     }
 
     public function store(Request $request)

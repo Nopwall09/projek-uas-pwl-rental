@@ -38,6 +38,13 @@
                     Laporan
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('kasir.driver') }}"
+                class="nav-link text-white {{ request()->routeIs('kasir.driver') ? 'active' : '' }}">
+                    <i class="bi bi-person-lines-fill me-2"></i>
+                    Data Driver
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a href="{{ route('kasir.mobil') }}"
@@ -46,6 +53,14 @@
                     Data Mobil
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('kasir.history') }}"
+                class="nav-link text-white {{ request()->routeIs('kasir.history') ? 'active' : '' }}">
+                    <i class="bi bi-clock-history me-2"></i>
+                    History Rental
+                </a>
+            </li>
+
 
         </ul>
 

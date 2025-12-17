@@ -11,7 +11,9 @@ class CarClassForm
     {
         return $schema
             ->components([
-                TextInput::make('class_nama'),
+                TextInput::make('class_nama')->required()
+                    ->unique(table: 'class', column: 'class_nama', ignoreRecord: true),
+                    
             ]);
     }
 }

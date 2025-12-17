@@ -14,6 +14,9 @@ class Mobil extends Model
         'mobil_warna', 'mobil_plat', 'mobil_tahun', 
         'mobil_status', 'harga_rental'
     ];
+    protected $casts = [
+    'fasilitas' => 'array',
+    ];
 
     // Foreign key relasi
     public function merk()

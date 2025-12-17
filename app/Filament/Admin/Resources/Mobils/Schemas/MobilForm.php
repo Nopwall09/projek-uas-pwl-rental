@@ -22,8 +22,9 @@ class MobilForm
                     FileUpload::make('mobil_image')
                         ->label('Foto Mobil')
                         ->image()
-                        ->directory('mobil') // otomatis ke storage/app/public/mobil
-                        ->disk('public'),  // pakai disk public agar bisa diakses via URL
+                        ->directory('mobil') 
+                        ->disk('public')
+                        ->maxSize(2048), 
                     Select::make('merk_id')
                         ->relationship('merk', 'merk_nama')
                         ->label('Merk')
@@ -63,8 +64,8 @@ class MobilForm
 
                     TextInput::make('mobil_warna')->required(),
 
-                    TextInput::make('mobil_plat')->required(),
-
+                    TextInput::make('mobil_plat')->required()
+                        ->unique(table: 'mobil', column: 'mobil_plat', ignoreRecord: true),
                     TextInput::make('mobil_tahun')
                         ->numeric()
                         ->minValue(1990)

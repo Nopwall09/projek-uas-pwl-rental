@@ -20,7 +20,7 @@ class MobilsTable
                 ImageColumn::make('mobil_image')
                     ->label('Foto')
                     ->disk('public')
-                    ->square(),
+                    ->getStateUsing(fn($record) => $record->mobil_image),
 
                 TextColumn::make('nama_mobil')
                     ->label('Nama'),

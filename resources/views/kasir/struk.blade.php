@@ -4,34 +4,48 @@
     <title>Struk Rental</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            width: 300px;
+            font-family: 'Courier New', Courier, monospace;
+            width: 320px;
             margin: auto;
+            padding: 5px;
+            font-size: 12px;
         }
-        h3 {
+        h2, h3 {
             text-align: center;
-            margin-bottom: 5px;
+            margin: 0;
         }
         .line {
             border-top: 1px dashed #000;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         table {
             width: 100%;
-            font-size: 14px;
+            border-collapse: collapse;
+            margin-bottom: 5px;
         }
         td {
-            padding: 3px 0;
+            padding: 2px 0;
         }
         .right {
             text-align: right;
+        }
+        .center {
+            text-align: center;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .small {
+            font-size: 10px;
         }
     </style>
 </head>
 <body onload="window.print()">
 
-<h3>STRUK RENTAL MOBIL</h3>
-<p style="text-align:center;">{{ now()->format('d/m/Y H:i') }}</p>
+<h2>🚗 RENTAL MOBIL</h2>
+<h3>STRUK TRANSAKSI</h3>
+<p class="center small">{{ now()->format('d/m/Y H:i') }}</p>
 
 <div class="line"></div>
 
@@ -48,6 +62,14 @@
         </td>
     </tr>
     <tr>
+        <td>Transmisi</td>
+        <td class="right">{{ $rental->mobil->Transmisi ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td>Warna</td>
+        <td class="right">{{ $rental->mobil->mobil_warna ?? '-' }}</td>
+    </tr>
+    <tr>
         <td>Tgl Sewa</td>
         <td class="right">{{ $rental->tgl_sewa }}</td>
     </tr>
@@ -57,7 +79,7 @@
     </tr>
     <tr>
         <td>Driver</td>
-        <td class="right">{{ ucfirst($rental->pilihan) }}</td>
+        <td class="right">{{ $rental->driver->driver_nama ?? '-' }}</td>
     </tr>
 </table>
 
@@ -65,18 +87,16 @@
 
 <table>
     <tr>
-        <td><strong>Total</strong></td>
-        <td class="right">
-            <strong>
-                Rp {{ number_format($rental->total_sewa, 0, ',', '.') }}
-            </strong>
+        <td class="total">Total</td>
+        <td class="right total">
+            Rp {{ number_format($rental->total_sewa, 0, ',', '.') }}
         </td>
     </tr>
 </table>
 
 <div class="line"></div>
 
-<p style="text-align:center;">
+<p class="center">
     Terima kasih 🙏<br>
     Selamat jalan
 </p>

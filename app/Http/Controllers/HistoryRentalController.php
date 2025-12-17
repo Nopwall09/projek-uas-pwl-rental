@@ -10,8 +10,11 @@ class HistoryRentalController extends Controller
 {
     public function index()
     {
-        $histories = HistoryRental::with(['user', 'rentalItem'])->paginate(20);
-        return response()->json($histories);
+        $history = HistoryRental::with(['user', 'rentalitem'])->paginate(10);
+
+
+
+        return view('kasir.history', compact('history'));
     }
 
     public function store(Request $request)

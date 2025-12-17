@@ -50,4 +50,8 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(HistoryRental::class, 'user_id', 'user_id');
     }
+    public function history()
+    {
+        return $this->hasMany(HistoryRental::class,'rental_id', 'rental_id');
+    }
 }
