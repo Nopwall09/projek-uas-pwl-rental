@@ -1,66 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Informasi Rental Mobil – UAS PWL
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Rental Mobil merupakan aplikasi web yang dibuat dalam rangka **Ujian Akhir Semester (UAS) Pemrograman Web Lanjutan (PWL)** untuk mengelola bisnis rental mobil secara digital, mulai dari pengelolaan data mobil, driver, transaksi hingga laporan.
 
-## About Laravel
+Aplikasi ini dibangun menggunakan **Laravel 10**, **PHP 8.2**, **MySQL** dan menerapkan konsep **CRUD** serta role-based access control untuk admin dan kasir.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛠️ Backend (Admin & Kasir)
 
-## Learning Laravel
+* Manajemen **Mobil**
+* Manajemen **Driver**
+* Manajemen **User** (admin & kasir)
+* Manajemen **Transaksi Sewa**
+* Laporan transaksi berdasarkan tanggal
+* Dashboard ringkasan (mobil tersedia, total transaksi, total pendapatan)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 👤 Pengguna (Customer)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* Registrasi dan login pengguna
+* Pemesanan mobil online
+* Cetak invoice
+* Pembayaran via transfer/tunai
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 📁 Struktur Proyek
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+projek-uas-pwl-rental/
+├─ app/
+├─ bootstrap/
+├─ config/
+├─ database/
+├─ public/
+├─ resources/
+├─ routes/
+├─ tests/
+├─ artisan
+├─ composer.json
+├─ package.json
+└─ vite.config.js
+```
 
-### Premium Partners
+Struktur folder mengikuti **standar Laravel** yang memisahkan antara model, controller, view, konfigurasi, dan asset publik.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 🧾 Teknologi yang Digunakan
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Teknologi                         | Versi               |
+| --------------------------------- | ------------------- |
+| Laravel                           | 10.x                |
+| PHP                               | 8.2                 |
+| MySQL                             | Latest              |
+| Blade                             | Laravel View Engine |
+| Tailwind / Bootstrap              | CSS Framework       |
+| Filament Admin Panel *(opsional)* | Admin UI            |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📥 Cara Instalasi
 
-## Security Vulnerabilities
+Ikuti langkah berikut untuk menjalankan aplikasi di lokal:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **Clone repository**
 
-## License
+   ```bash
+   git clone https://github.com/Nopwall09/projek-uas-pwl-rental.git
+   cd projek-uas-pwl-rental
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. **Install dependencies**
+
+   ```bash
+   composer install
+   npm install
+   npm run build
+   ```
+
+3. **Setup environment**
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Konfigurasi database**
+   Edit file `.env`:
+
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. **Migrasi database + seeder**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+6. **Jalankan server**
+
+   ```bash
+   php artisan serve
+   ```
+
+---
+
+## 🧠 Cara Menambah User Admin / Kasir
+
+Untuk membuat akun admin atau kasir, gunakan perintah artisan:
+
+```bash
+php artisan make:filament-user
+```
+
+Ikuti instruksi untuk memasukkan email, password, dan role.
+
+---
+
+## 📦 Library & Paket Eksternal
+
+Proyek ini menggunakan beberapa paket eksternal seperti:
+
+* Filament Admin Panel
+* Laravel Breeze / Jetstream (untuk login & registrasi)
+* Laravel UI
+
+> Sesuaikan bagian ini jika ada paket lain yang digunakan.
+
+---
+
+## 📊 Screenshot *(opsional)*
+
+Tambahkan beberapa screenshot UI project:
+
+```
+![Dashboard](link-gambar-dashboard)
+![Form Transaksi](link-gambar-form)
+```
+
+---
+
+## 💡 Kontribusi
+
+Jika ingin berkontribusi:
+
+1. Fork repository
+2. Buat *branch* baru
+3. Tambahkan fitur atau perbaikan
+4. Buat pull request
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dirilis di bawah **MIT License** — bebas digunakan, dimodifikasi, dan didis
