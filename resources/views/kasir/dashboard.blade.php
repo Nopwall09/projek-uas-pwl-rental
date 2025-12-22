@@ -88,14 +88,44 @@
                 <tbody>
                 @forelse ($sewaAktif as $item)
                 <tr>
-                    <td>{{ $item->nama_Pelanggan }}</td>
+                    <td>
+                        @if ($item->booking_source === 'offline')
+                            {{ $item->nama_Pelanggan }}
+                            <span class="badge bg-secondary ms-1">Offline</span>
+                        @else
+                            {{ $item->user->name ?? '-' }}
+                            <span class="badge bg-info ms-1">Online</span>
+                        @endif
+                    </td>
+
+
                     <td>{{ $item->mobil->nama_mobil ?? '-' }}</td>
                     <td>{{ $item->tgl_sewa }}</td>
                     <td>{{ $item->tgl_kembali }}</td>
                     <td>
-                        <span class="badge bg-warning">Disewa</span>
+                        @if ($item->status === 'pending')
+                            <span class="badge bg-warning">Pending</span>
+                        @elseif ($item->status === 'aktif')
+                            <span class="badge bg-success">Aktif</span>
+                        @else
+                            <span class="badge bg-secondary">Selesai</span>
+                        @endif
+
                     </td>
+
                     <td class="d-flex gap-1">
+                        @if ($item->status === 'pending')
+                        <form action="{{ route('kasir.konfirmasi', $item->rental_id) }}"
+                            method="POST"
+                            onsubmit="return confirm('Konfirmasi pembayaran?')">
+                            @csrf
+                            @method('PUT')
+                            <button class="btn btn-sm btn-primary">
+                                Konfirmasi Bayar
+                            </button>
+                        </form>
+                        @endif
+
 
                         <form action="{{ route('kasir.destroy', $item->rental_id) }}"
                             method="POST"

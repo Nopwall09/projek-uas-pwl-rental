@@ -42,18 +42,21 @@ body {
 
 /* CARD */
 .card {
-    min-width: 220px;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 3px 12px rgba(0,0,0,.12);
+    width: 220px;     /* ganti min-width */
+    flex-shrink: 0;   /* biar ga ngecil */
 }
 
 .card-img {
-    background: black;
     width: 100%;
     height: 160px;
+    aspect-ratio: 16 / 9;
+    background-size: cover;      /* PENTING */
+    background-position: center; /* PENTING */
+    background-repeat: no-repeat;
+    height: auto;
+    border-radius: 12px 12px 0 0;
 }
+
 
 .card-body {
     padding: 10px;

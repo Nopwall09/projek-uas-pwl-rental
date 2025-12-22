@@ -89,45 +89,64 @@ class RentalItemController extends Controller
     public function storeOnline(Request $request)
     {
         $validated = $request->validate([
-            'mobil_id'      => 'required|exists:mobil,mobil_id',
-            'lama_rental'   => 'required|numeric|min:1',
-            'tgl'           => 'required|date',
-            'total_sewa'    => 'required|numeric|min:0',
-            'jaminan'       => 'required|string|max:50',
-            'driver_option' => 'required|in:with,without',
-            'driver_id'     => 'nullable|exists:driver,driver_id',
+            'mobil_id'          => 'required|exists:mobil,mobil_id',
+            'tgl_sewa'          => 'required|date',
+            'tgl_kembali'       => 'required|date|after:tgl_sewa',
+            'lama_rental'       => 'required|integer|min:1',
+            'jaminan'           => 'required|string|max:50',
+            'metode_pembayaran' => 'required|in:Tunai,Transfer',
+            'driver_option'     => 'required|in:with,without',
+            'driver_id'         => 'nullable|exists:driver,driver_id',
         ]);
+
+        $mobil = Mobil::findOrFail($validated['mobil_id']);
+
+        $lamaRental = max(
+            Carbon::parse($validated['tgl_sewa'])
+                ->diffInDays(Carbon::parse($validated['tgl_kembali'])),
+            1
+        );
+
+        $total = $mobil->harga_rental * $lamaRental;
 
         $driverId = null;
 
-        // Jika pakai driver
-        if ($request->driver_option === 'with') {
-            $driverId = $request->driver_id;
+        if ($validated['driver_option'] === 'with') {
+            if (!$validated['driver_id']) {
+                return back()->withErrors(['driver_id' => 'Driver wajib dipilih']);
+            }
 
-            Driver::where('driver_id', $driverId)
-                ->update(['status' => 'Booked']);
+            $driver = Driver::findOrFail($validated['driver_id']);
+            $driverId = $driver->driver_id;
+            $total += $driver->biaya_driver;
+            $driver->update(['status' => 'Booked']);
         }
+
+        $status = $validated['metode_pembayaran'] === 'Transfer'
+            ? 'pending'
+            : 'aktif';
 
         $rental = RentalItem::create([
             'user_id'        => Auth::id(),
-            'mobil_id'       => $validated['mobil_id'],
+            'mobil_id'       => $mobil->mobil_id,
             'driver_id'      => $driverId,
-            'lama_rental'    => $validated['lama_rental'],
-            'tgl'            => $validated['tgl'],
-            'total_sewa'     => $validated['total_sewa'],
+            'lama_rental'    => $lamaRental,
+            'tgl_sewa'       => $validated['tgl_sewa'],
+            'tgl_kembali'    => $validated['tgl_kembali'],
+            'total_sewa'     => $total,
             'jaminan'        => $validated['jaminan'],
-            'pilihan'        => $validated['driver_option'],
+            'pilihan'        => $validated['driver_option'] === 'with'
+                                ? 'dengan driver'
+                                : 'lepas kunci',
             'booking_source' => 'online',
-            'nama_Pelanggan' => null,
-            'status'         => 'aktif',
+            'status'         => $status,
         ]);
 
-        Mobil::where('mobil_id', $validated['mobil_id'])
-            ->update(['mobil_status' => 'Disewa']);
+        $mobil->update(['mobil_status' => 'Disewa']);
 
-        return redirect()
-            ->route('pesanan-saya')
-            ->with('success', 'Booking online berhasil dibuat');
+        return $validated['metode_pembayaran'] === 'Transfer'
+            ? redirect()->route('pesanan.qr', $rental->rental_id)
+            : redirect()->route('pesanan.invoice', $rental->rental_id);
     }
 
 
@@ -149,10 +168,11 @@ class RentalItemController extends Controller
             ->sum('total_sewa');
 
         // Sewa aktif (belum jatuh tempo)
-        $sewaAktif = RentalItem::with('mobil')
-            ->where('status', 'aktif')
+        $sewaAktif = RentalItem::with(['mobil', 'user'])
+            ->whereIn('status', ['aktif', 'pending'])
             ->whereDate('tgl_kembali', '>=', today())
             ->get();
+
 
 
         return view('kasir.dashboard', compact(
@@ -164,7 +184,26 @@ class RentalItemController extends Controller
         ));
     }
 
+     public function storeRating(Request $request, $mobilId)
+    {
+        $request->validate([
+            'rating'   => 'required|integer|min:1|max:5',
+            'komentar' => 'nullable|string|max:255',
+        ]);
 
+        $mobil = Mobil::findOrFail($mobilId);
+
+        // Simpan feedback sebagai JSON
+        $mobil->feedback = json_encode([
+            'rating'   => $request->rating,
+            'komentar' => $request->komentar,
+            'user_id'  => Auth::id(),
+        ]);
+
+        $mobil->save();
+
+        return back()->with('success', 'Rating berhasil dikirim 👍');
+    }
     /* =====================================================
      | SELESAIKAN SEWA
      ===================================================== */
@@ -242,20 +281,30 @@ class RentalItemController extends Controller
 
     public function pesananSaya()
     {
-        $rentals = RentalItem::with([
-            'mobil.merk',
-            'mobil.carclass',
-            'mobil.tipe',
-            'feedback'
-        ])
-        ->where('user_id', Auth::id())
-        ->orderBy('tgl_sewa', 'desc')
-        ->get();
+        $pesanan = RentalItem::with(['mobil.merk', 'driver'])
+            ->where('user_id', Auth::id())
+            ->orderBy('tgl_sewa', 'desc')
+            ->get();
 
-        return view('pembayaran.index');
+        return view('profile.pesanan-saya', compact('pesanan'));
     }
+
     
 
+    public function konfirmasiPembayaran($id)
+    {
+        $rental = RentalItem::findOrFail($id);
+
+        if ($rental->status !== 'pending') {
+            return back()->with('error', 'Status sudah dikonfirmasi');
+        }
+
+        $rental->update([
+            'status' => 'aktif'
+        ]);
+
+        return back()->with('success', 'Pembayaran berhasil dikonfirmasi');
+    }
 
     public function laporan(Request $request)
     {
@@ -294,6 +343,31 @@ class RentalItemController extends Controller
         return view('kasir.struk', compact('rental'));
     }
 
+    // pesanan online
+    public function createOnline(Mobil $mobil)
+    {
+        $drivers = Driver::where('status', 'tersedia')->get();
 
+        return view('pesanan.konfirmasi', compact('mobil', 'drivers'));
+    }
+    public function invoice($id)
+    {
+        $rental = RentalItem::with([
+                'mobil.merk',
+                'driver',
+                'user'
+            ])->findOrFail($id);
+
+
+        return view('pesanan.invoice', compact('rental'));
+    }
+    public function qr($id)
+    {
+        $rental = RentalItem::with('mobil.merk')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        return view('pesanan.qr', compact('rental'));
+    }
 
 }

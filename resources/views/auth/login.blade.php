@@ -24,6 +24,10 @@
 
             <button type="submit" class="btn-login">Login</button>
         </form>
+        <p class="forgot-password">
+            <a href="{{ route('password.request') }}" class="text-primary">Lupa Password?</a>
+        </p>
+
 
         <p class="register-text">
             Belum punya akun?

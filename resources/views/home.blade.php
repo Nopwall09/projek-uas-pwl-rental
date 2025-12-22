@@ -43,10 +43,12 @@
         <h2 style="margin-bottom:30px;">Pilihan Unit Tersedia</h2>
 
         <div class="grid-mobil">
+            {{-- tambah class div --}}
+            
         
         @foreach ($mobils as $mobil)
             <div class="card">
-                <img src="{{ asset('storage/'.$mobil->mobil_image) }}"
+                <img src="{{ asset('storage/mobil/'.$mobil->mobil_image)  }}"
                     alt="{{ $mobil->merk->merk_nama ?? 'Mobil' }}">
 
                 <h4 style="margin-top:15px;">
@@ -56,12 +58,12 @@
 
                 <p>Rp {{ number_format($mobil->harga_rental, 0, ',', '.') }} / hari</p>
 
-                <a href="{{ route('pesanan.detail', ['mobil' => $mobil->mobil_id]) }}">
+                <a href="{{ route('pesanan.create', $mobil->mobil_id) }}">
                     <button>Booking</button>
                 </a>
-
             </div>
         @endforeach
+
 
         </div>
 

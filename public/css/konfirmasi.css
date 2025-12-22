@@ -1,0 +1,125 @@
+/* ===== KONFIRMASI PEMESANAN ===== */
+
+body {
+    background: #f1f4f9;
+}
+
+/* Wrapper */
+.confirmation-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Card utama */
+.confirmation-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+}
+
+/* ===== LEFT : IMAGE ===== */
+.confirmation-image img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+/* ===== RIGHT : INFO ===== */
+.confirmation-info h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: #1f2937;
+}
+
+.confirmation-info .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #163a63;
+    margin-bottom: 15px;
+}
+
+.confirmation-info .specs {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* ===== FORM ===== */
+.confirmation-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.confirmation-form label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.confirmation-form input,
+.confirmation-form select {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    outline: none;
+}
+
+.confirmation-form input:focus,
+.confirmation-form select:focus {
+    border-color: #163a63;
+}
+
+/* Full width */
+.form-full {
+    grid-column: span 2;
+}
+
+/* Button */
+.confirm-btn {
+    grid-column: span 2;
+    margin-top: 15px;
+    background: linear-gradient(135deg, #163a63, #0f2a4d);
+    color: #fff;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(22,58,99,0.35);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 768px) {
+    .confirmation-card {
+        grid-template-columns: 1fr;
+        padding: 25px;
+    }
+
+    .confirmation-image img {
+        height: 220px;
+    }
+
+    .confirmation-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-full,
+    .confirm-btn {
+        grid-column: span 1;
+    }
+}

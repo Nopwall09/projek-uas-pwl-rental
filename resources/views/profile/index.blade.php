@@ -17,7 +17,7 @@
         </div>
 
         <div class="sidebar-item">
-            <a href="{{ route('pemesanan') }}">Pesanan Saya</a>
+            <a href="{{ route('pesanan-saya') }}">Pesanan Saya</a>
         </div>
     </div>
 

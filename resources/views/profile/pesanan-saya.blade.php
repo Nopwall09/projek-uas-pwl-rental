@@ -1,74 +1,123 @@
-@if($rentals->count())
-    @foreach($rentals as $rental)
-        <div class="p-3 mb-3" style="border:1px solid #eee;border-radius:14px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;">
+@include('layouts.navbar')
 
-                {{-- INFO PESANAN --}}
-                <div>
-                    <h5 style="margin:0;font-weight:600;">
-                        {{ $rental->mobil->merk->nama_merk ?? '-' }}
-                        {{ $rental->mobil->tipe->nama_tipe ?? '' }}
-                    </h5>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Pesanan Saya</title>
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+</head>
+<body>
 
-                    <p style="margin:2px 0;color:#555;">
-                        Unit: {{ $rental->mobil->mobil_plat }}
-                    </p>
+<div class="wrapper">
 
-                    <p style="margin:2px 0;color:#555;">
-                        Tanggal: {{ \Carbon\Carbon::parse($rental->tgl)->format('d M Y') }}
-                    </p>
+    {{-- SIDEBAR --}}
+    <div class="sidebar">
+        <div class="sidebar-item">
+            <a href="{{ route('profile') }}">Akun Saya</a>
+        </div>
 
-                    <p style="margin:2px 0;color:#555;">
-                        Status:
-                        <span style="font-weight:600;color:#163a63;">
-                            {{ $rental->mobil->mobil_status }}
-                        </span>
-                    </p>
+        <div class="sidebar-item active">
+            <a href="{{ route('pesanan-saya') }}">Pesanan Saya</a>
+        </div>
+    </div>
+
+    {{-- CONTENT --}}
+    <div class="content">
+        <h2>Pesanan Saya</h2>
+
+        @forelse($pesanan as $item)
+            <div class="profile-box">
+
+                <div class="row">
+                    <span class="label">Mobil</span>
+                    <span class="value">
+                        {{ $item->mobil->merk->merk_nama }} {{ $item->mobil->nama_mobil }}
+                    </span>
                 </div>
 
-                {{-- FEEDBACK --}}
-                <div>
-                    @if($rental->feedback)
-                        <p style="margin:0;font-weight:600;">
-                            ⭐ {{ $rental->feedback->rating }}
-                        </p>
-                        <p style="margin:0;color:#555;">
-                            "{{ $rental->feedback->komentar }}"
-                        </p>
-                    @else
-                        <form action="{{ route('feedback.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="rental_id" value="{{ $rental->rental_id }}">
-
-                            <select name="rating" required class="form-select mb-2">
-                                <option value="">Rating</option>
-                                <option value="5">⭐⭐⭐⭐⭐</option>
-                                <option value="4">⭐⭐⭐⭐</option>
-                                <option value="3">⭐⭐⭐</option>
-                                <option value="2">⭐⭐</option>
-                                <option value="1">⭐</option>
-                            </select>
-
-                            <textarea name="komentar"
-                                class="form-control mb-2"
-                                placeholder="Tulis komentar..." required></textarea>
-
-                            <input type="hidden" name="tanggal_feedback"
-                                value="{{ now()->toDateString() }}">
-
-                            <button class="btn btn-sm"
-                                style="background:#163a63;color:white;border-radius:20px;">
-                                Kirim Feedback
-                            </button>
-                        </form>
-                    @endif
+                <div class="row">
+                    <span class="label">Tanggal</span>
+                    <span class="value">
+                        {{ $item->tgl_sewa }} s/d {{ $item->tgl_kembali }}
+                    </span>
                 </div>
+
+                <div class="row">
+                    <span class="label">Total</span>
+                    <span class="value">
+                        Rp {{ number_format($item->total_sewa,0,',','.') }}
+                    </span>
+                </div>
+
+                <div class="row">
+                    <span class="label">Metode Pembayaran</span>
+                    <span class="value">{{ $item->jaminan }}</span>
+                </div>
+
+                <div class="row">
+                    <span class="label">Status</span>
+                    <span class="value">
+                        @if($item->jaminan === 'Transfer' && $item->status === 'pending')
+                            Menunggu Konfirmasi
+                        @elseif($item->jaminan === 'Tunai')
+                            Belum Dibayar
+                        @else
+                            Lunas
+                        @endif
+                    </span>
+                </div>
+
+                {{-- BUTTON INVOICE --}}
+                @if(
+                    ($item->jaminan === 'Tunai') ||
+                    ($item->jaminan === 'Transfer' && $item->status === 'lunas')
+                )
+                    <a href="{{ route('pesanan.invoice', $item->rental_id) }}"
+                    class="btn-edit"
+                    target="_blank">
+                        Cetak Invoice
+                    </a>
+                @endif
+
+                {{-- ✅ FORM RATING MOBIL --}}
+                @if($item->status === 'selesai' && !$item->mobil->feedback)
+
+                    <hr>
+
+                    <form action="{{ route('mobil.rating', $item->mobil->mobil_id) }}" method="POST">
+                        @csrf
+
+                        <label><b>Rating Mobil</b></label>
+
+                        <select name="rating" required>
+                            <option value="">-- Pilih Rating --</option>
+                            <option value="1">⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                        </select>
+
+                        <textarea name="komentar"
+                            placeholder="Komentar (opsional)"
+                            style="width:100%;margin-top:8px"></textarea>
+
+                        <button type="submit" class="btn-edit" style="margin-top:10px">
+                            Kirim Rating
+                        </button>
+                    </form>
+
+                @endif
 
             </div>
-        </div>
-    @endforeach
-@else
-    <p style="text-align:center;color:#666;margin-top:40px;">
-        Belum ada pesanan
-    </p>
-@endif
+        @empty
+            <p>Tidak ada pesanan.</p>
+        @endforelse
+
+
+    </div>
+</div>
+
+</body>
+</html>

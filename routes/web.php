@@ -9,6 +9,7 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HistoryRentalController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/',[MobilController::class, 'home'])->name('home');
+Route::get('/katalog', [MobilController::class, 'katalog'])->name('katalog');
 /*
 |--------------------------------------------------------------------------
 | USER
@@ -38,26 +40,59 @@ Route::middleware(['user'])->group(function () {
     Route::post('/send-message', [ChatController::class, 'sendMessage']);
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::get('/katalog', [MobilController::class, 'katalog'])->name('katalog');
 
     Route::get('/pesanan-saya', [RentalItemController::class, 'pesananSaya'])->name('pesanan-saya');
-    // Route::post('/pesanan/store', [RentalItemController::class, 'store'])->name('pesanan.store');
 
-    Route::get('/mobil/{mobil}', [MobilController::class, 'detail'])->name('pesanan.detail');
-    // Route::get('/pesanan-saya',function(){
-    //     return view('Pemesanan.pesanan-saya')->name('pesanan.saya');
-    // });
-    Route::get('/pemesanan', function () {
-        return view('Pemesanan.index');
-    })->name('pemesanan.konfirmasi');
+    // Route::get('/pesanan/{id}/invoice', [RentalItemController::class, 'invoice'])
+    //     ->name('pesanan.invoice');
 
-    Route::post('/pemesanan/konfirmasi', [MobilController::class, 'konfirmasi'])->name('pemesanan.konfirmasi');
+    // Route::get('/pesanan-saya', [RentalItemController::class, 'pesananSaya'])->name('pesanan-saya');
+    // // Route::post('/pesanan/store', [RentalItemController::class, 'store'])->name('pesanan.store');
 
-    Route::get('/pembayaran/{rental}', [PembayaranController::class, 'index'])->name('pembayaran.index');
-    Route::post('/pembayaran/{rental}/konfirmasi', [PembayaranController::class, 'konfirmasi'])->name('pembayaran.konfirmasi');
-    Route::post('/pemesanan', [MobilController::class, 'konfirmasi'])
-    ->name('pemesanan.konfirmasi');
+    // Route::get('/mobil/{mobil}', [MobilController::class, 'create'])->name('pesanan.create');
+    // // Route::get('/pesanan-saya',function(){
+    // //     return view('Pemesanan.pesanan-saya')->name('pesanan.saya');
+    // // });
+    // Route::get('/pemesanan', function () {
+    //     return view('Pemesanan.index');
+    // })->name('pemesanan.konfirmasi');
+
+    // Route::post('/pemesanan/konfirmasi', [MobilController::class, 'konfirmasi'])->name('pemesanan.konfirmasi');
+
+    // Route::get('/pembayaran/{rental}', [PembayaranController::class, 'index'])->name('pembayaran.index');
+    // Route::post('/pembayaran/{rental}/konfirmasi', [PembayaranController::class, 'konfirmasi'])->name('pembayaran.konfirmasi');
+    // Route::post('/pemesanan', [MobilController::class, 'konfirmasi'])
+    // ->name('pemesanan.konfirmasi');
+    Route::get('/pesanan/{mobil}', [RentalItemController::class, 'createOnline'])
+    ->name('pesanan.create');
+    
+    Route::post('/pesanan', [RentalItemController::class, 'storeOnline'])
+        ->name('pesanan.store');
+
+    Route::post('/mobil/{mobil}/rating', 
+        [MobilController::class, 'storeRating']
+    )->name('mobil.rating')->middleware('auth');
+
+    Route::get('/pesanan-saya', [RentalItemController::class, 'pesananSaya'])
+        ->name('pesanan-saya');
+    Route::get('/pesanan/{pesanan}/invoice', 
+    [RentalItemController::class, 'invoice']
+    )->name('pesanan.invoice');
+    Route::get('/pesanan/{id}/qr', [RentalItemController::class, 'qr'])->name('pesanan.qr');
+
+    // reset password
+    
+
+    // Form minta reset password
+    Route::get('password/reset', [ForgotPasswordController::class, 'showRequestForm'])->name('password.request');
+
+    // Proses kirim email link reset
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+    // Form ganti password
+    Route::get('password/reset/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
 });
 
 /*
@@ -71,6 +106,8 @@ Route::middleware(['kasir'])->group(function () {
     // DASHBOARD
     Route::get('/kasir/dashboard', [RentalItemController::class, 'dashboard'])
         ->name('kasir.dashboard');
+    Route::put('/kasir/konfirmasi/{id}', 
+    [RentalItemController::class, 'konfirmasiPembayaran'])->name('kasir.konfirmasi');
 
     // CREATE TRANSAKSI
     Route::get('/kasir/create', [RentalItemController::class, 'create'])

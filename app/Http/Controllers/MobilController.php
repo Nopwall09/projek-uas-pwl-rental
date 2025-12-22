@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Mobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\CarClass;
+use Illuminate\Support\Facades\Auth;
 class MobilController extends Controller
+
 {
     public function index()
     {
@@ -32,7 +34,27 @@ class MobilController extends Controller
     {
         return view('pesanan.detail', compact('mobil'));
     }
-    
+    public function storeRating(Request $request, $mobilId)
+    {
+        $request->validate([
+            'rating'   => 'required|integer|min:1|max:5',
+            'komentar' => 'nullable|string|max:255',
+        ]);
+
+        $mobil = Mobil::findOrFail($mobilId);
+
+        // Simpan feedback sebagai JSON
+        $mobil->feedback = json_encode([
+            'rating'   => $request->rating,
+            'komentar' => $request->komentar,
+            'user_id'  => Auth::id(),
+        ]);
+
+        $mobil->save();
+
+        return back()->with('success', 'Rating berhasil dikirim 👍');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -117,35 +139,27 @@ class MobilController extends Controller
 
     public function home()
     {
-        $mobils = Mobil::where('mobil_status', 'Tersedia')->get();
+        $mobils = Mobil::with(['merk'])
+            ->where('mobil_status', 'Tersedia')
+            ->get();
 
         return view('home', compact('mobils'));
     }
 
 
+
+    
+
     public function katalog()
     {
-        $cityCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 1) // 1 = City Car
-            ->where('mobil_status', 'Tersedia')
-            ->get();
+        $classes = CarClass::with(['mobils' => function ($q) {
+            $q->where('mobil_status', 'Tersedia')
+            ->with('merk'); 
+        }])->get();
 
-        $familyCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 2) // 2 = Family Car
-            ->where('mobil_status', 'Tersedia')
-            ->get();
-
-        $luxuryCars = Mobil::with(['merk', 'carclass', 'tipe'])
-            ->where('class_id', 3) // 3 = Luxury Car
-            ->where('mobil_status', 'Tersedia')
-            ->get();
-
-        return view('Katalog.index', compact(
-            'cityCars',
-            'familyCars',
-            'luxuryCars'
-        ));
+        return view('Katalog.index', compact('classes'));
     }
+
 
     
 
